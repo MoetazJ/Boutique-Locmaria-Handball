@@ -5,16 +5,20 @@ class Accueil extends CI_Controller {
 	public function __construct()
 	 {
 		 parent::__construct();
+		 $this->load->model('db_model');
 		 $this->load->helper('url');
 	 }
 	 public function afficher()
 	 {
-	 //Chargement de la view haut.php
-	 $this->load->view('templates/haut');
-	 //Chargement de la view du milieu : page_accueil.php
-	 $this->load->view('page_accueil');
-	 //Chargement de la view bas.php
-	 $this->load->view('templates/bas');
+	 	$data['produits'] = $this->db_model->afficher_pdt();
+	 	var_dump($data);
+
+		//Chargement de la view haut.php
+		$this->load->view('templates/haut');
+		//Chargement de la view du milieu : page_accueil.php
+		$this->load->view('page_accueil',$data);
+		//Chargement de la view bas.php
+		$this->load->view('templates/bas');
 	 }
 }
 ?>

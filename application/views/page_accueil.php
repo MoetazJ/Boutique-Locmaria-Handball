@@ -55,12 +55,11 @@
     </div>
   </section>
   <!-- End Hero Section -->
-
 <!-- ======= Portfolio Section ======= -->
     <section id="portfolio" class="portfolio sections-bg">
       <div class="container" data-aos="fade-up">
         <div class="section-header">
-          <h2>Nosindex.php/products/affichers</h2>
+          <h2>Nos produits</h2>
           <p>Quam sed id excepturi ccusantium dolorem ut quis dolores nisi llum nostrum enim velit qui ut et autem uia reprehenderit sunt deleniti</p>
         </div>
 
@@ -75,128 +74,40 @@
               <li data-filter=".filter-books">Books</li>
             </ul><!-- End Portfolio Filters -->
           </div>
-
+          
           <div class="row gy-4 portfolio-container">
+            <?php 
+               $x = 0; 
+              if($produits != NULL) {
+                foreach($produits as $produit){
+            ?>
 
-            <div class="col-xl-4 col-md-6 portfolio-item filter-app">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/app-1.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/app-1.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">App 1</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
+                <div class="col-xl-4 col-md-6 portfolio-item">
+                  <div class="portfolio-wrap">
+                    <a href="<?php echo base_url();?>style/img/<?php echo $produit['pdt_img']; ?>" class="glightbox">
+                      <img src="<?php echo $this->config->base_url(); ?>style/img/<?php echo $produit['pdt_img']; ?>" class="img-fluid" alt="">
+                    </a>
+                    <div class="portfolio-info">
+                      <h4>
+                        <a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">
+                          <?php echo $produit['pdt_nom']; ?>
+                        </a>
+                      </h4>
+                      <p><?php echo $produit['pdt_description']; ?></p>
+                    </div>
+                  </div>
+                </div><!-- End Portfolio Item -->
 
-            <div class="col-xl-4 col-md-6 portfolio-item filter-product">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/product-1.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/product-1.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">Product 1</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
+            <?php 
+                 // fin de la boucle foreach
+              } }else { 
+                echo "Aucun produit disponible en ce moment !"; 
+              } 
+            ?>
+          </div><!-- End Portfolio Container -->
 
-            <div class="col-xl-4 col-md-6 portfolio-item filter-branding">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/branding-1.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/branding-1.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">Branding 1</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
 
-            <div class="col-xl-4 col-md-6 portfolio-item filter-books">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/books-1.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/books-1.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/index.php/products/afficher" title="More Details">Books 1</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-xl-4 col-md-6 portfolio-item filter-app">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/app-2.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/app-2.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">App 2</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-xl-4 col-md-6 portfolio-item filter-product">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/product-2.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/product-2.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">Product 2</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-xl-4 col-md-6 portfolio-item filter-branding">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/branding-2.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/branding-2.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">Branding 2</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-xl-4 col-md-6 portfolio-item filter-books">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/books-2.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/books-2.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">Books 2</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-xl-4 col-md-6 portfolio-item filter-app">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/app-3.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/app-3.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">App 3</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-xl-4 col-md-6 portfolio-item filter-product">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/product-3.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/product-3.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">Product 3</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-xl-4 col-md-6 portfolio-item filter-branding">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/branding-3.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/branding-3.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">Branding 3</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-xl-4 col-md-6 portfolio-item filter-books">
-              <div class="portfolio-wrap">
-                <a href="<?php echo base_url();?>style/img/portfolio/books-3.jpg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="<?php echo base_url();?>style/img/portfolio/books-3.jpg" class="img-fluid" alt=""></a>
-                <div class="portfolio-info">
-                  <h4><a href="<?php echo base_url();?>index.php/products/afficher" title="More Details">Books 3</a></h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
+         
 
           </div><!-- End Portfolio Container -->
 
