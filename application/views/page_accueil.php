@@ -59,7 +59,7 @@
       <div class="container" data-aos="fade-up">
         <div class="section-header">
           <h2>Nos produits</h2>
-          <p>Quam sed id excepturi ccusantium dolorem ut quis dolores nisi llum nostrum enim velit qui ut et autem uia reprehenderit sunt deleniti</p>
+          <p>Découvrez les produits officiels de notre club de handball, pour soutenir votre équipe favorite sur et en dehors du terrain !</p>
         </div>
 
         <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order" data-aos="fade-up" data-aos-delay="100">
@@ -120,7 +120,7 @@
 
         <div class="section-header">
           <h2>Contact</h2>
-          <p>Nulla dolorum nulla nesciunt rerum facere sed ut inventore quam porro nihil id ratione ea sunt quis dolorem dolore earum</p>
+          <p>Voici notre formulaire de contact, n'hésitez pas à nous envoyer un message si vous avez des questions ou des commentaires.</p>
         </div>
 
         <div class="row gx-lg-0 gy-4">

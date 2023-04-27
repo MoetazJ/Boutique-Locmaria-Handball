@@ -1,0 +1,71 @@
+
+
+## Cahier des charges pour la boutique en ligne de locmaria Handball : 
+
+### 1. Objectif du projet :
+Créer une boutique en ligne pour vendre une variété de produits, avec la possibilité pour les clients de personnaliser leur choix en fonction de la couleur et de la taille.
+
+### 2. Public cible :
+Tous les consommateurs intéressés par l'achat de produits en ligne.
+
+### 3. Fonctionnalités du site :
+
+**3.1 Gestion des utilisateurs :**
+   - Inscription et connexion des utilisateurs
+   - Profil utilisateur avec la possibilité de modifier les informations personnelles
+   - Gestion des droits d'accès selon le rôle de l'utilisateur (client, administrateur)
+
+**3.2 Gestion des produits :**
+   - Affichage des produits avec des détails (nom, description, prix, image, disponibilité)
+   - Gestion des variantes de produits (couleurs, tailles)
+   - Possibilité pour l'administrateur d'ajouter, de modifier et de supprimer des produits
+
+**3.3 Gestion du panier :**
+   - Ajout de produits dans le panier
+   - Modification de la quantité de produits dans le panier
+   - Suppression de produits du panier
+   - Visualisation du panier avec le total des prix
+
+**3.4 Gestion des commandes :**
+   - Passage de la commande
+   - Affichage de l'historique des commandes pour chaque utilisateur
+   - Gestion des commandes par l'administrateur (changements de statut)
+
+**3.5 Autres fonctionnalités :**
+   - Filtrage des produits par catégorie, couleur, taille, etc.
+   - Système d'évaluations et de commentaires pour les produits
+
+### 4. Technologies à utiliser :
+   - Backend : PHP avec MySQL pour la gestion de la base de données
+   - Frontend : HTML, CSS, JavaScript
+
+### 5. Contraintes :
+   - Le site doit être responsive, adapté à tous les types d'écrans (ordinateur, tablette, mobile)
+   - Le site doit être sécurisé, notamment en ce qui concerne les données des utilisateurs et les transactions
+
+### 6. Délais :
+   - Phase de conception et de planification : 1 semaine
+   - Phase de développement : 6 semaines
+   - Phase de test : 1 semaines
+   - Lancement du site : Date à déterminer après la phase de test
+
+Explicatioin de la base de donnees : 
+t_compte_cpt : Cette table stocke les informations de compte des utilisateurs. Chaque compte a un identifiant unique (cpt_id), un mot de passe (cpt_mdp) et un mail (cpt_mail).
+
+t_produit_pdt : Cette table contient des informations sur tous les produits disponibles. Chaque produit a un identifiant unique (pdt_id), un nom (pdt_nom), un prix (pdt_prix), une description (pdt_description), une taille (pdt_taille), une disponibilité (pdt_dispo), une image (pdt_img), un type (pdt_type) et un prix par jour (pdt_prixjr).
+
+colors : Cette table stocke les différentes couleurs disponibles pour les produits.
+
+sizes : Cette table stocke les différentes tailles disponibles pour les produits.
+
+product_variants : Cette table contient des informations sur les différentes variantes de produits disponibles. Chaque variante de produit a une couleur, une taille et un stock spécifiques.
+
+cart : Cette table stocke les informations sur le panier des utilisateurs. Chaque panier est associé à un utilisateur spécifique.
+
+cart_items : Cette table stocke les articles spécifiques contenus dans chaque panier. Chaque article du panier est associé à une variante spécifique d'un produit.
+
+t_profil_pfl : Cette table stocke les informations de profil des utilisateurs, y compris leur nom, prénom, rôle et mail.
+
+orders : Cette table stocke les informations sur les commandes passées par les utilisateurs. Chaque commande a un statut et une date de commande spécifiques.
+
+order_items : Cette table stocke les articles spécifiques contenus dans chaque commande. Chaque article de la commande est associé à une variante spécifique d'un produit.
