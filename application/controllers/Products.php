@@ -14,7 +14,6 @@ class Products extends CI_Controller {
 	{
 		$data['produit'] = $this->db_model->pdt($id_pdt);
 		$data['color'] = $this->db_model->get_color($id_pdt);
-		var_dump($data);
 		//Chargement de la view haut.php
 		$this->load->view('templates/haut');
 		//Chargement de la view du milieu : page_accueil.php
@@ -23,15 +22,17 @@ class Products extends CI_Controller {
 		$this->load->view('templates/bas');
 	}
 
-	public function ajout_panier()
+/*	public function ajout_panier($cpt_id)
 	{
-		$data['panier'] = $this->db_model->select_pdt($id_pdt);
 		$size = $this->input->post('size');
 		$color = $this->input->post('color');
 		$size_jr = $this->input->post('size_jr');
-		
-		$this->load->view('pan',$data);
+		$qte = $this->input->post('quantity');
+		$data['panier'] = $this->db_model->ajout_panier($id_pdt,$size,$color,$qte);
+		// association du panier au compte de l'utilisateur 
+		$req = $this->db_model->association_panier($cpt_id)
+		//$this->load->view('pan',$data);
 
-	}
+	}*/
 }
 ?>

@@ -3,11 +3,8 @@
 <!-- ======= Portfolio Details Section ======= -->
 <section id="portfolio-details" class="portfolio-details">
   <div class="container" data-aos="fade-up">
-
-        
-
-              
-    <form method="post" action="<?php echo base_url() ?>/products/ajout_panier">
+         
+    <form method="post" action="<?php echo base_url() ?>/products/ajout_panier/<?php">
     <img src="<?php echo base_url();?>style/img/<?php echo $produit->pdt_img?>" alt="" style="display:block; margin:auto;">
     <h3><?php echo $produit->pdt_nom ?>   </h3>
     <br>
@@ -34,7 +31,7 @@
       echo "<br>";
       echo "<br>";
     ?>
-<div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
       <label class="btn btn-secondary active">
         <input type="radio" name="prixjr" value="S" autocomplete="off" checked> S
       </label>
@@ -52,20 +49,26 @@
       echo "€";
       echo "<br>";
       echo "<br>";
+
+      $x=0;
     ?>
    
 
     <div class="form-group">
-    <label for="exampleFormControlSelect1">Couleur</label>
-    <select class="form-control" id="exampleFormControlSelect1">
-      <option><?php echo $color->col_clr; ?></option>
-      <option><?php echo $color->col_clr; ?></option>
-      <option><?php echo $color->col_clr; ?></option>
-      
-    </select>
-  </div>
+        <label for="exampleFormControlSelect1">Couleur</label>
+        <select class="form-control" id="exampleFormControlSelect1" name="color">
+            <?php foreach ($color as $clr) { ?>
+                <option value="<?php echo $clr['color_name']; ?>"><?php echo $clr['color_name']; ?></option>
+            <?php } ?>
+        </select>
+    </div>
+
     <br>
     <br>
+    <div class="form-group">
+      <label for="quantity">Quantité :</label>
+      <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1">
+    </div>
     <br>
   
     <button type="submit" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" color="yellow">Ajouter au panier</button>  
