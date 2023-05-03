@@ -140,7 +140,7 @@
 				echo "Vous eties deconnnecter";
 			}
 	}
-		public function logout(){
+	public function logout(){
 		$this->session->sess_destroy();
 		redirect('compte/connecter');
 		
@@ -219,7 +219,7 @@
 		}
 	}
 	public function produits(){
-			if($this->session->userdata('connecter')){ 	
+		if($this->session->userdata('connecter')){ 	
 			if($this->session->userdata('role') == 'A'){ 	
 
 			$data['pdts'] = $this->db_model->get_allpdt();
@@ -242,12 +242,17 @@
 	}
 
 	public function supprimer_pdt($id_pdt){
-			if($this->session->userdata('connecter')){ 	
+		if($this->session->userdata('connecter')){ 	
 			if($this->session->userdata('role') == 'A'){ 	
 				$data['variant_id'] = $this->db_model->get_variant($id_pdt);
-				var_dump($data);
-				//$this->db_model->supprimer_pdt($id_pdt,$variant_id->variant_id);
+				$this->load->view('templates/menu_administrateur');
 				$this->load->view('effacer_produit',$data);
+								$this->load->view('templates/bas');
+
+				$this->db_model->supprimer_produits($id_pdt); 
+				$this->db_model->sup($id_pdt); 
+
+
 			}
 			else{
 				$this->session->sess_destroy();
@@ -261,4 +266,45 @@
 			echo "Vous etiez deconnnecter";
 		}
 	}
+
+	
+
+	public function ajout()
+	{
+		$this->form_validation->set_rules('prix', 'prix', 'required');
+		$this->form_validation->set_rules('prixjr', 'prixjr', 'required');
+		$this->form_validation->set_rules('stock', 'stock', 'required');
+		$this->form_validation->set_rules('type', 'type', 'required');
+		$this->form_validation->set_rules('nom', 'nom', 'required');
+		$this->form_validation->set_rules('description', 'description', 'required');
+
+		$prix = $this->input->post('prix');
+		$prixjr = $this->input->post('prixjr');
+		$description = $this->input->post('description');
+		$stock = $this->input->post('stock');	
+		$nom = $this->input->post('nom');	
+		$img = $this->input->post('img');	
+		$dispo = $this->input->post('dispo');	
+		$type = $this->input->post('type');	
+		$data['pdts'] = $this->db_model->get_allpdt();
+
+		if($this->session->userdata('connecter')){
+			if($this->session->userdata('role') == 'A'){ 	
+				$this->db_model->ajout_pdt($prix,$prixjr,$stock,$nom, $description, $img, $dispo, $type);
+				$this->load->view('templates/menu_administrateur');
+				$this->load->view('produits_lister', $data);
+				$this->load->view('templates/bas');
+			}
+			else{
+				$this->session->sess_destroy();
+				redirect('accueil/afficher');
+			}
+		}
+		else{
+			$this->session->sess_destroy();
+			redirect('accueil/afficher');
+		}
+	}
+
+
 }

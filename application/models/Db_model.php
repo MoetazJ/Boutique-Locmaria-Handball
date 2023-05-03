@@ -146,15 +146,32 @@ class Db_model extends CI_Model {
 			$query = $this->db->query("SELECT variant_id from product_variants where pdt_id ='".$id."' ;");
 			return $query->result_array();
 		}
-		public function supprimer_pdt($id,$variant_id){
+		public function supprimer_pdt($variant_id){
 			$sql1 = "DELETE FROM cart_items where variant_id = '".$variant_id."'";
 			$this->db->query($sql1);
+			/**/
+			return true;
+		}
+		public function supprimer_produits($id){
 			$sql2 = "DELETE FROM product_variants where pdt_id = '".$id."'";
 
 	    	$this->db->query($sql2);
-			$query ="DELETE FROM t_produit_pdt WHERE pdt_id = '".$variant_id."';";
-			$this->db->query($query);
+			
+		}
+
+		public function sup($id){
+			$query ="DELETE FROM t_produit_pdt WHERE pdt_id = '".$id."';";
+			$this->db->query($query);			
 			return true;
 		}
+
+		public function ajout_pdt($prix,$prixjr,$stock,$nom,$descriptionn, $img,$dispo, $type){
+    $query = "INSERT INTO `t_produit_pdt` (`pdt_id`, `pdt_nom`, `pdt_prix`, `pdt_description`, `pdt_taille`, `pdt_dispo`, `pdt_img`, `pdt_type`, `pdt_prixjr`) VALUES
+    (NULL, '".$nom."', '".$prix."', '".$descriptionn."', NULL, '".$dispo."', '".$img."', '".$type."', '".$prixjr."')";
+    $this->db->query($query);          
+    return true;
+}
+
+
 }
 
