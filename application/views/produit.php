@@ -4,7 +4,7 @@
 <section id="portfolio-details" class="portfolio-details">
   <div class="container" data-aos="fade-up">
          
-    <form method="post" action="<?php echo base_url() ?>/products/ajout_panier/<?php">
+    <form method="post" action="<?php echo base_url() ?>index.php/products/choix_variants/<?php echo $produit->pdt_id ?>">
     <img src="<?php echo base_url();?>style/img/<?php echo $produit->pdt_img?>" alt="" style="display:block; margin:auto;">
     <h3><?php echo $produit->pdt_nom ?>   </h3>
     <br>
@@ -12,39 +12,35 @@
         echo "<br>";
         echo ".<br>";
     ?>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-secondary active">
-        <input type="radio" name="prix" value="S" autocomplete="off" checked> S
-      </label>
-      <label class="btn btn-secondary">
-        <input type="radio" name="prix" value="M" autocomplete="off"> M
-      </label>
-      <label class="btn btn-secondary">
-        <input type="radio" name="prix" value="L" autocomplete="off"> L
-      </label>
+    <div class="form-group">
+        <label for="exampleFormControlSelect1">Tailles adultes (NULL si vous voulez commandez la taille junior)</label>
+        <select class="form-control" id="exampleFormControlSelect1" name="size">
+            <?php foreach ($size as $taille) { ?>
+                <option value="<?php echo $taille['size_name']; ?>"><?php echo $taille['size_name']; ?></option>
+            <?php } ?>
+            <option value="NULL">NULL</option>
+
+        </select>
     </div>
     <?php 
-      echo "<br>";
-      echo "<br>";
       echo "Prix Adulte : "; echo $produit->pdt_prix;
       echo "€<br>";
       echo "<br>";
-      echo "<br>";
     ?>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-secondary active">
-        <input type="radio" name="prixjr" value="S" autocomplete="off" checked> S
-      </label>
-      <label class="btn btn-secondary">
-        <input type="radio" name="prixjr" value="M" autocomplete="off"> M
-      </label>
-      <label class="btn btn-secondary">
-        <input type="radio" name="prixjr" value="L" autocomplete="off"> L
-      </label>
+    
+    <div class="form-group">
+        <label for="exampleFormControlSelect1">Tailles juniors (NULL si vous voulez commandez la taille adulte)</label>
+        <select class="form-control" id="exampleFormControlSelect1" name="sizejr">
+            <?php foreach ($size as $taille) { ?>
+                <option value="<?php echo $taille['size_name']; ?>"><?php echo $taille['size_name']; ?></option>
+            <?php } ?>
+                        <option value="NULL">NULL</option>
+
+        </select>
     </div>
+   
     <?php
-      echo "<br>";
-      echo "<br>";
+      
       echo "Prix Junior : "; echo $produit->pdt_prixjr;
       echo "€";
       echo "<br>";
@@ -64,7 +60,7 @@
     </div>
 
     <br>
-    <br>
+    
     <div class="form-group">
       <label for="quantity">Quantité :</label>
       <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1">

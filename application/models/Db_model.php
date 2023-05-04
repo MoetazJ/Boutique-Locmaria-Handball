@@ -27,6 +27,33 @@ class Db_model extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function get_size($id_pdt) {
+		$query = $this->db->query("SELECT size_name from sizes
+					join product_variants USING(size_name) 
+					where pdt_id = ".$id_pdt." group by size_name;");
+		return $query->result_array();
+	}
+
+	public function verif_variant($id_pdt,$color,$size,$sizejr,$qte){
+		if($size == NULL){
+			$query = $this->db->query("SELECT variant_id FROM product_variants
+                           WHERE pdt_id = ".$id_pdt."
+                           AND color_name = '".$color."'
+                           AND sizejr_name = '".$size."'
+                           AND (".$qte." > stock)");
+
+		}
+
+		else {
+			$query = $this->db->query("SELECT variant_id FROM product_variants
+										WHERE pdt_id = ".$id_pdt."
+										AND color_name = '".$color."'
+										AND size_name = '".$size."'
+										AND (".$qte." > stock);"); 
+		}
+		return ($query);
+	}
+
 /*	public function set_compte()
 	{	// Fonction qui insère une ligne dans la table des comptes
 		$this->load->helper('url');
@@ -170,7 +197,9 @@ class Db_model extends CI_Model {
     (NULL, '".$nom."', '".$prix."', '".$descriptionn."', NULL, '".$dispo."', '".$img."', '".$type."', '".$prixjr."')";
     $this->db->query($query);          
     return true;
-}
+		}
+
+
 
 
 }
