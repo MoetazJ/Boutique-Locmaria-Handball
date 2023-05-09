@@ -10,9 +10,13 @@ class Accueil extends CI_Controller {
 	 public function afficher()
 	 {
 	 	$data['produits'] = $this->db_model->afficher_pdt();
-
-		//Chargement de la view haut.php
-		$this->load->view('templates/haut');
+		if($this->session->userdata('connecter')){
+		
+			$this->load->view('templates/menu_utilisateur');
+		}
+		else{		
+			$this->load->view('templates/haut');
+		}
 		//Chargement de la view du milieu : page_accueil.php
 		$this->load->view('page_accueil',$data);
 		//Chargement de la view bas.php

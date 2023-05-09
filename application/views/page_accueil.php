@@ -92,7 +92,6 @@
                           <?php echo $produit['pdt_nom']; ?>
                         </a>
                       </h4>
-                      <p><?php echo $produit['pdt_prix']; echo "€" ?></p>
                     </div>
                   </div>
                 </div><!-- End Portfolio Item -->

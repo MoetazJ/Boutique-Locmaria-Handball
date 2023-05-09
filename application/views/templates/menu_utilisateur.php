@@ -55,32 +55,11 @@
         <ul>
           <li><a href="<?php echo base_url() ?>">Accueil</a></li>
           <li><a href="#portfolio">Produits</a></li>
-          <li><a href="#portfolio">Commandes</a></li>
-          <li><a href="#portfolio">Mon profil utilisateur</a></li>
-          <li><a href="#portfolio">Panier</a></li>
+          <li><a href="<?php echo base_url() ?>">Mon profil utilisateur</a></li>
+          <li><a href="<?php echo base_url() ?>">Panier</a></li>
 
-          <li><a href="#portfolio">Deconnexion</a></li>
+          <li><a href="<?php echo base_url() ?>">Deconnexion</a></li>
 
-
-
-
-          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-            <ul>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-                <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
-            </ul>
-          </li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav><!-- .navbar -->

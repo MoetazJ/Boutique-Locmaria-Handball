@@ -36,14 +36,20 @@
 		}
 		else {// Le formulaire est valide
 			
-			$this->db_model->set_compte(); //si l'insertion se passe bien alors : 
+			$result = $this->db_model->set_compte(); //si l'insertion se passe bien alors : 
+			if($result){
 				$this->load->view('templates/haut');
 				$this->load->view('compte_succes',$data);
 				$this->load->view('templates/bas');
-	            /*// Si l'insertion n'a pas été effectuée, afficher une vue d'erreur
+			}
+			else{
+				// Account creation failed because email already exists
+            		echo "L'adresse email existe déjà. Veuillez choisir une autre adresse email.";
 	            $this->load->view('templates/haut');
-	            $this->load->view('erreur_insertion');
-	            $this->load->view('templates/bas');*/
+	            $this->load->view('compte_creer', $data);
+	            $this->load->view('templates/bas');
+			}	
+	            
        	}
 	}
 
@@ -67,9 +73,11 @@
 				$role = $this->db_model->get_role($mail);	
 				$prenom = $this->db_model->get_prenom($mail);
 				$nom= $this->db_model->get_nom($mail);
-				
+				$id = $this->db_model->get_id($mail);
+
 
 				$session_data = array('mail' => $mail,
+					'id' => $id,
 					'prenom' => $prenom,
 					'nom' => $nom, 
 					'role' => $role->role_uti,
@@ -102,9 +110,10 @@
 			$role = $this->db_model->get_role($mail);	
 			$prenom = $this->db_model->get_prenom($mail);
 			$nom= $this->db_model->get_nom($mail);
-			
+			$id = $this->db_model->get_id($mail);
 
 			$session_data = array('mail' => $mail,
+				'id' => $id,
 				'prenom' => $prenom,
 				'nom' => $nom, 
 				'role' => $role->role_uti,
@@ -115,7 +124,6 @@
 		{
 			$this->load->view('templates/haut');
 			$this->load->view('compte_connecter');
-
 			$this->load->view('templates/bas');
 		}
 
@@ -130,7 +138,7 @@
 			}
 			else{// si non un utilisaateur connecte qui est redirige vers la page d'accueil
 				$this->load->view('templates/menu_utilisateur');
-				$this->load->view('page_accueil');
+				$this->load->view('accueil_admin');
 				$this->load->view('templates/bas');
 			}
 		}
@@ -150,8 +158,7 @@
 			if($this->session->userdata('role') == 'A'){ 	
 				$this->load->view('templates/menu_administrateur');//navbar admin
 				$this->load->view('profil_info');
-				$this->load->view('templates/bas');//navbar admin
-
+				$this->load->view('templates/bas');
 			}
 			else{
 				$this->load->view('templates/menu_formateur');//navbar admin
@@ -276,10 +283,9 @@
 		$this->form_validation->set_rules('stock', 'stock', 'required');
 		$this->form_validation->set_rules('type', 'type', 'required');
 		$this->form_validation->set_rules('nom', 'nom', 'required');
-		$this->form_validation->set_rules('description', 'description', 'required');
+		$this->form_validation->set_rules('description', 'description', 'required');	
 
-		$prix = $this->input->post('prix');
-		$prixjr = $this->input->post('prixjr');
+		
 		$description = $this->input->post('description');
 		$stock = $this->input->post('stock');	
 		$nom = $this->input->post('nom');	
@@ -290,7 +296,7 @@
 
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'A'){ 	
-				$this->db_model->ajout_pdt($prix,$prixjr,$stock,$nom, $description, $img, $dispo, $type);
+				$this->db_model->ajout_pdt($stock,$nom, $description, $img, $dispo, $type);
 				$this->load->view('templates/menu_administrateur');
 				$this->load->view('produits_lister', $data);
 				$this->load->view('templates/bas');

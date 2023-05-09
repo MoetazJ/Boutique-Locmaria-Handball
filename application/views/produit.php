@@ -13,24 +13,16 @@
         echo ".<br>";
     ?>
     <div class="form-group">
-        <label for="exampleFormControlSelect1">Tailles adultes (NULL si vous voulez commandez la taille junior)</label>
-        <select class="form-control" id="exampleFormControlSelect1" name="size">
-            <?php foreach ($size as $taille) { ?>
-                <option value="<?php echo $taille['size_name']; ?>"><?php echo $taille['size_name']; ?></option>
-            <?php } ?>
-            <option value="NULL">NULL</option>
-
-        </select>
+    <select class="form-control" name="choix">
+      <option value="adulte">Taille Adulte</option>
+      <option value="junior">Taille Junior</option>
+    </select>
     </div>
-    <?php 
-      echo "Prix Adulte : "; echo $produit->pdt_prix;
-      echo "€<br>";
-      echo "<br>";
-    ?>
+
+
     
     <div class="form-group">
-        <label for="exampleFormControlSelect1">Tailles juniors (NULL si vous voulez commandez la taille adulte)</label>
-        <select class="form-control" id="exampleFormControlSelect1" name="sizejr">
+        <select class="form-control" name="size" >
             <?php foreach ($size as $taille) { ?>
                 <option value="<?php echo $taille['size_name']; ?>"><?php echo $taille['size_name']; ?></option>
             <?php } ?>
@@ -38,16 +30,6 @@
 
         </select>
     </div>
-   
-    <?php
-      
-      echo "Prix Junior : "; echo $produit->pdt_prixjr;
-      echo "€";
-      echo "<br>";
-      echo "<br>";
-
-      $x=0;
-    ?>
    
 
     <div class="form-group">

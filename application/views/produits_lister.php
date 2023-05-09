@@ -1,4 +1,4 @@
-<h1>Listes des produits</h1>
+<h1>Liste des produits</h1>
 <br />
 
 <?php if($pdts != NULL): ?>
@@ -7,25 +7,33 @@
 			<tr>
 				<th>ID</th>
 				<th>Nom</th>
-				<th>Prix adulte</th>
-				<th>Prix junior</th>
 				<th>Type du produit</th>
 				<th>Image</th>
+                <th>Disponibilite</th>
 
-				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php foreach($pdts as $pdt): ?>
 				<tr>
-					<td><?php echo $pdt['pdt_id']; ?></td>
-					<td><?php echo $pdt['pdt_nom']; ?></td>
-					<td><?php echo $pdt['pdt_prix']; ?></td>
-					<td><?php echo $pdt['pdt_prixjr']; ?></td>
-					<td><?php echo $pdt['pdt_type']; ?></td>
-					<td><?php echo $pdt['pdt_img']; ?></td>
 
-					<td><a href="<?php echo base_url('index.php/compte/supprimer_pdt/'.$pdt['pdt_id']); ?>">Supprimer</a></td> 
+                    <td><a href="<?php echo base_url('index.php/products/voir_variants/'.$pdt['pdt_id']); ?>"><?php echo $pdt['pdt_id']; ?></a></td>
+                    <form method="post" action="<?php echo base_url('index.php/products/modifier_pdt/'.$pdt['pdt_id']); ?>">
+
+                    <td><input type="text" name="nom" value="<?php echo $pdt['pdt_nom']; ?>"></td>
+
+                    <td><input type="text" name="type" value="<?php echo $pdt['pdt_type']; ?>"></td>
+                    <td><input type="text" name="img" value="<?php echo $pdt['pdt_img']; ?>"></td>
+                    <td>
+                            <select name="dispo">
+                                <option value="D" <?php if ($pdt['pdt_dispo'] == 'D') echo 'selected'; ?>>Disponible</option>
+                                <option value="N" <?php if ($pdt['pdt_dispo'] == 'N') echo 'selected'; ?>>Non disponible</option>
+                            </select>
+                            <button type="submit"  class="btn btn-modifier">Modifier</button>
+                        </form>
+                    </td>
+
+					<!--<td><a href="<?php //echo base_url('index.php/compte/supprimer_pdt/'.$pdt['pdt_id']); ?> ">Supprimer</a></td> -->
 				</tr>
 			<?php endforeach; ?>
 		</tbody>
@@ -51,12 +59,7 @@
         <textarea name="description" class="form-control"  placeholder="Description" required></textarea>
     </div>
     <br>
-    <div class="form-group">
-        <input type="number" class="form-control" step="1" min="0" name="prix" placeholder="Prix adulte" required>
-    </div>
-        <div class="form-group">
-        <input type="number" class="form-control" step="1" min="0" name="prixjr" placeholder="Prix Junior" required>
-    </div>
+    
     <div class="form-group">
         <input type="text" class="form-control" min="0" name="type" placeholder="Type du produit" required>
     </div>

@@ -1,4 +1,4 @@
-<h2>Bienvenue a votre espace admin
+<h2>Bienvenue 
 <?php
 	$mail = $this->session->userdata('mail');
 	$role = $this->session->userdata('role');
