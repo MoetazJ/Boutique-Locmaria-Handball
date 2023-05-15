@@ -26,7 +26,6 @@
             <?php foreach ($size as $taille) { ?>
                 <option value="<?php echo $taille['size_name']; ?>"><?php echo $taille['size_name']; ?></option>
             <?php } ?>
-                        <option value="NULL">NULL</option>
 
         </select>
     </div>

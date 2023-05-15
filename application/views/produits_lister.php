@@ -33,7 +33,6 @@
                         </form>
                     </td>
 
-					<!--<td><a href="<?php //echo base_url('index.php/compte/supprimer_pdt/'.$pdt['pdt_id']); ?> ">Supprimer</a></td> -->
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

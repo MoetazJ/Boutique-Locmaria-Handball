@@ -38,13 +38,14 @@
 			
 			$result = $this->db_model->set_compte(); //si l'insertion se passe bien alors : 
 			if($result){
+				echo "Votre compte a ete creez avec succes";
 				$this->load->view('templates/haut');
-				$this->load->view('compte_succes',$data);
+				$this->load->view('compte_connect',$data);
 				$this->load->view('templates/bas');
 			}
 			else{
 				// Account creation failed because email already exists
-            		echo "L'adresse email existe déjà. Veuillez choisir une autre adresse email.";
+            	echo "L'adresse email existe déjà. Veuillez choisir une autre adresse email.";
 	            $this->load->view('templates/haut');
 	            $this->load->view('compte_creer', $data);
 	            $this->load->view('templates/bas');
@@ -55,7 +56,7 @@
 
 	public function connecter()
 	{
-				$this->load->library('session');
+		$this->load->library('session');
 
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -184,7 +185,6 @@
 
 			$data['titre'] = 'Liste des comptes :';
 			$data['cpts'] = $this->db_model->get_allcpt();
-			$data['nb_cpt'] = $this->db_model->get_nbcpt();
 
 			$this->load->view('templates/menu_administrateur');
 			$this->load->view('compte_liste',$data);
@@ -225,6 +225,8 @@
 			echo "Vous etiez deconnnecter";
 		}
 	}
+
+
 	public function produits(){
 		if($this->session->userdata('connecter')){ 	
 			if($this->session->userdata('role') == 'A'){ 	
@@ -248,13 +250,14 @@
 		}
 	}
 
+
 	public function supprimer_pdt($id_pdt){
 		if($this->session->userdata('connecter')){ 	
 			if($this->session->userdata('role') == 'A'){ 	
 				$data['variant_id'] = $this->db_model->get_variant($id_pdt);
 				$this->load->view('templates/menu_administrateur');
 				$this->load->view('effacer_produit',$data);
-								$this->load->view('templates/bas');
+				$this->load->view('templates/bas');
 
 				$this->db_model->supprimer_produits($id_pdt); 
 				$this->db_model->sup($id_pdt); 
@@ -275,7 +278,7 @@
 	}
 
 	
-
+	//ajout d'un pdt
 	public function ajout()
 	{
 		$this->form_validation->set_rules('prix', 'prix', 'required');
@@ -312,5 +315,25 @@
 		}
 	}
 
+
+	public function modif_compte($cpt_id){
+		$actif = $this->input->post('actif');	
+		$role = $this->input->post('role');	
+
+		if($this->session->userdata('connecter')){// verid de la conneion 
+			if($this->session->userdata('role') == 'A'){ //v verif que c un administrateur	
+				$this->db_model->update_cpt($cpt_id, $actif,$role);
+				redirect('compte/lister_profils');
+			}
+			else{
+				$this->session->sess_destroy();
+				redirect('accueil/afficher');
+			}
+		}
+		else{
+			$this->session->sess_destroy();
+			redirect('accueil/afficher');
+		}
+	}
 
 }

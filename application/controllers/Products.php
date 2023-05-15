@@ -10,7 +10,7 @@ class Products extends CI_Controller {
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 	}
-	public function afficher($id_pdt =FALSE)
+	public function afficher($id_pdt)
 	{
 		$data['produit'] = $this->db_model->pdt($id_pdt);
 		$data['color'] = $this->db_model->get_color($id_pdt);
@@ -30,46 +30,56 @@ class Products extends CI_Controller {
 		$this->form_validation->set_rules('size', 'size', 'required');		
 	
 		$this->form_validation->set_rules('qte', 'qte', 'required');		
-		//Connexion
+
+		$choix = $this->input->post('choix'); 
+
 		$color = $this->input->post('color');
 		$sizejr = $this->input->post('sizejr');
 		$size = $this->input->post('size'); 
 		$qte = $this->input->post('quantity'); 
+		$sexe = $this->input->post('sexe'); 
+
+		$data['produit'] = $this->db_model->pdt($pdt_id);
+		$data['color'] = $this->db_model->get_color($pdt_id);
+		$data['size'] = $this->db_model->get_size($pdt_id);
+
 		if($this->session->userdata('connecter')){
-			if($this->session->userdata('role') == 'A'){//profil admin 	
-				$this->load->view('templates/menu_administrateur');//navbar admin
-				$this->load->view('profil_info');
-				$this->load->view('templates/bas');
-			}
-			else{// profil utilisateur 
-				if(strcmp($size, 'NULL') and  strcmp($sizejr, 'NULL')) { // choix invalide du variant
-					$this->load->view('templates/haut');
-					$this->load->view('echec_choixvariant');
+			if($this->session->userdata('role') == 'A' || $this->session->userdata('role') == 'U'){//profil admin 	
+				// profil utilisateur 
+				 
+				if ($choix == 'adulte') {
+					$data['variant'] = $this->db_model->verif_variant($pdt_id,$color,$size, $qte,$sexe);
+				}
+				else{
+					$data['variant'] = $this->db_model->verif_variant($pdt_id,$color,$sizejr, $qte,$sexe);
+				}
+				//var_dump($data['variant']);
+				if ($data['variant'] !== false) {
+				    $cpt_id = $this->session->userdata('id');
+				    $this->db_model->insert_panier($cpt_id, $data['variant']->variant_id, $qte);
+				    echo "Votre commande a etait ajoute dans le panier";
+				    $this->load->view('templates/menu_utilisateur');
+				    $this->load->view('produit',$data);
+				    $this->load->view('templates/bas');
+				} else {
+				    echo "La taille ou la couleur du produit que vous avez choisi n'est pas disponible. Désolé !";
+				    $this->load->view('templates/menu_utilisateur');
+					//Chargement de la view du milieu : page_accueil.php
+					$this->load->view('produit',$data);
 					$this->load->view('templates/bas');
-					
-				}else{ 
-					$data['variant'] = $this->db_model->verif_variant($pdt_id,$color,$size, $sizejr,$qte);
-					if ($data['variant'] != null) {
-					    $cpt_id = $this->session->userdata('id');
-					    $this->db_model->insert_panier($cpt_id, $data['variant']->variant_id, $qte);
-					    $this->load->view('templates/haut');
-					    $this->load->view('succes_choixvariant');
-					    $this->load->view('templates/bas');
-					} else {
-					    $this->load->view('templates/haut');
-					    $this->load->view('echec_variant');
-					    //$this->load->view('templates/bas');
-					}
+
 				}
 			}
 		}
+		
 		else{// si l'utilisateur n'est pas connecte et veux ajouter un produit au panier. Il est redirige vers la page de connexion 
 			redirect('compte/connecter');
 		}
 		
 	}
 
-	public function Panier (){
+	//afficher panier
+	public function Panier(){
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'A'){//profil admin 	
 				$this->load->view('templates/menu_administrateur');//navbar admin
@@ -78,11 +88,25 @@ class Products extends CI_Controller {
 			}
 			else{
 				$this->session->userdata('role') ;
-				$cpt_id = $this->session->get_id();
-				$cart_items = $this->db_model->affiche_pan();
+				$cpt_id = $this->session->userdata('id');
+				//var_dump($cpt_id);
+				$data['panier'] = $this->db_model->affiche_pan($cpt_id);
+
+				$this->load->view('templates/menu_utilisateur'); 
+				$this->load->view('pan',$data);
+				$this->load->view('templates/bas');
 			}
 		}
 	}
+
+	//effacer un variant du panier
+	public function remove_item()
+	{
+	    $item_id = $this->input->post('item_id');
+	    $this->db_model->remove_from_cart($item_id);
+	    redirect('products/panier');
+	}
+
 			/*$dispo = $this->input->post('dispo');
 		$noms = $this->input->post('nom');
 	    $prix = $this->input->post('prix');
@@ -130,6 +154,9 @@ class Products extends CI_Controller {
 				$data['variant'] = $this->db_model->variant($pdt_id);
 				$data['pdt_id'] = $pdt_id;
 				$data['pdt_nom'] = $this->db_model->get_pdt_nom($pdt_id);
+				$data['sizes'] = $this->db_model->sizes();
+				$data['couleurs'] = $this->db_model->couleurs();
+
 				$this->load->view('templates/menu_administrateur');
 				$this->load->view('product_variant', $data);
 				$this->load->view('templates/bas');
@@ -150,10 +177,11 @@ class Products extends CI_Controller {
 	    $taillejr = $this->input->post('taillejr'); 
 	    $stock = $this->input->post('stock'); 
 	    $price = $this->input->post('price'); 
+	    $sexe = $this->input->post('sexe');
 
 	    if($this->session->userdata('connecter')){
 	        if($this->session->userdata('role') == 'A'){
-	            $this->db_model->modifier_variant($pdt_id, $variant_id, $couleur, $taille, $taillejr, $price, $stock);
+	            $this->db_model->modifier_variant($pdt_id, $variant_id, $couleur, $taille, $taillejr, $price, $stock,$sexe);
 	            redirect('products/voir_variants/'.$pdt_id);
 	        }
 	        else{
@@ -170,10 +198,11 @@ class Products extends CI_Controller {
 	    $choix = $this->input->post('choix'); 
 	    $stock = $this->input->post('stock'); 
 	    $price = $this->input->post('price'); 
+	    $sexe = $this->input->post('sexe');
 
 	    if($this->session->userdata('connecter')){
 	        if($this->session->userdata('role') == 'A'){
-	            $this->db_model->ajout_variant($pdt_id, $couleur, $taille, $choix, $price, $stock);
+	            $this->db_model->ajout_variant($pdt_id, $couleur, $taille, $choix, $price, $stock, $sexe);
 	            redirect('products/voir_variants/'.$pdt_id);
 	        }
 	        else{
