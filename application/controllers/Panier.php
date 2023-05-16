@@ -17,6 +17,17 @@ class Products extends CI_Controller {
 		//Chargement de la view du milieu : page_accueil.php
 		$this->load->view('pan',$data);
 		//Chargement de la view bas.php
+	 }
+
+	 public function commande()
+	 {
+	 	$data['produit'] = $this->db_model->select_pdt($id_pdt, $color, $size);
+	 	
+		//Chargement de la view haut.php
+		$this->load->view('templates/haut');
+		//Chargement de la view du milieu : page_accueil.php
+		$this->load->view('pan',$data);
+		//Chargement de la view bas.php
 		$this->load->view('templates/bas');
 	 }
 }

@@ -19,26 +19,33 @@
     </select>
     </div>
 
-
-    
     <div class="form-group">
-        <select class="form-control" name="size" >
+        <label for="exampleFormControlSelect1">Sexe : </label>
+
+    <select class="form-control" name="sexe">
+      <option value="H">Homme</option>
+      <option value="F">Femme</option>
+    </select>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleFormControlSelect1">Taille:</label>
+        <select class="form-control" name="size">
             <?php foreach ($size as $taille) { ?>
                 <option value="<?php echo $taille['size_name']; ?>"><?php echo $taille['size_name']; ?></option>
             <?php } ?>
-
         </select>
     </div>
-   
 
     <div class="form-group">
-        <label for="exampleFormControlSelect1">Couleur</label>
+        <label for="exampleFormControlSelect1">Couleur:</label>
         <select class="form-control" id="exampleFormControlSelect1" name="color">
             <?php foreach ($color as $clr) { ?>
                 <option value="<?php echo $clr['color_name']; ?>"><?php echo $clr['color_name']; ?></option>
             <?php } ?>
         </select>
     </div>
+
 
     <br>
     

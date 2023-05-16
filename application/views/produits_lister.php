@@ -1,6 +1,14 @@
 <h1>Liste des produits</h1>
 <br />
 
+<!-- Search form -->
+<form method="get" action="<?php echo base_url('index.php/products/search'); ?>">
+    <div class="form-group">
+        <input type="text" name="search" class="form-control" placeholder="Rechercher un produit ou un type de produit">
+    </div>
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+</form>
+
 <?php if($pdts != NULL): ?>
 	<table style="border-collapse: collapse; width: 100%; margin-top: 20px; margin-bottom: 20px;">
 		<thead>
@@ -44,7 +52,7 @@
 <?php
   	echo validation_errors();      
 
-  	echo form_open('compte/ajout');
+  	echo form_open('products/ajout');
         
 ?>
 <br>

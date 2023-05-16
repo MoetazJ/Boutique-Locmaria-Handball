@@ -12,15 +12,18 @@ class Products extends CI_Controller {
 	}
 	public function afficher($id_pdt)
 	{
+		
+		$data['type'] = $this->db_model->get_pdt_type($id_pdt);
 		$data['produit'] = $this->db_model->pdt($id_pdt);
 		$data['color'] = $this->db_model->get_color($id_pdt);
-		$data['size'] = $this->db_model->get_size($id_pdt);
-		//Chargement de la view haut.php
-		$this->load->view('templates/haut');
+		$data['size'] = $this->db_model->get_size($id_pdt,$data['type']);
+
+		$this->load->view('templates/menu_utilisateur');
 		//Chargement de la view du milieu : page_accueil.php
 		$this->load->view('produit',$data);
 		//Chargement de la view bas.php
 		$this->load->view('templates/bas');
+
 	}
 
 	public function choix_variants($pdt_id){
@@ -37,11 +40,12 @@ class Products extends CI_Controller {
 		$sizejr = $this->input->post('sizejr');
 		$size = $this->input->post('size'); 
 		$qte = $this->input->post('quantity'); 
-		$sexe = $this->input->post('sexe'); 
+		$sexe = $this->input->post('sexe');
 
+		$data['type'] = $this->db_model->get_pdt_type($pdt_id);
 		$data['produit'] = $this->db_model->pdt($pdt_id);
 		$data['color'] = $this->db_model->get_color($pdt_id);
-		$data['size'] = $this->db_model->get_size($pdt_id);
+		$data['size'] = $this->db_model->get_size($pdt_id,$data['type']);
 
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'A' || $this->session->userdata('role') == 'U'){//profil admin 	
@@ -78,6 +82,30 @@ class Products extends CI_Controller {
 		
 	}
 
+	public function produits(){
+		if($this->session->userdata('connecter')){ 	
+			if($this->session->userdata('role') == 'A'){ 	
+
+			$data['pdts'] = $this->db_model->get_allpdt();
+
+			$this->load->view('templates/menu_administrateur');
+			$this->load->view('produits_lister',$data);
+			$this->load->view('templates/bas');
+			}
+			else{
+				$this->session->sess_destroy();
+				redirect('compte/connecter');
+				echo "Vous etiez deconnnecter";
+			}
+		}		 
+		else{			
+			$this->session->sess_destroy();
+			redirect('compte/connecter');
+			echo "Vous etiez deconnnecter";
+		}
+	}
+
+
 	//afficher panier
 	public function Panier(){
 		if($this->session->userdata('connecter')){
@@ -94,7 +122,6 @@ class Products extends CI_Controller {
 
 				$this->load->view('templates/menu_utilisateur'); 
 				$this->load->view('pan',$data);
-				$this->load->view('templates/bas');
 			}
 		}
 	}
@@ -170,6 +197,42 @@ class Products extends CI_Controller {
 			}
 		}
 	}
+	//ajout d'un pdt
+	public function ajout()
+	{
+		$this->form_validation->set_rules('prix', 'prix', 'required');
+		$this->form_validation->set_rules('prixjr', 'prixjr', 'required');
+		$this->form_validation->set_rules('stock', 'stock', 'required');
+		$this->form_validation->set_rules('type', 'type', 'required');
+		$this->form_validation->set_rules('nom', 'nom', 'required');
+		$this->form_validation->set_rules('description', 'description', 'required');	
+
+		
+		$description = $this->input->post('description');
+		$stock = $this->input->post('stock');	
+		$nom = $this->input->post('nom');	
+		$img = $this->input->post('img');	
+		$dispo = $this->input->post('dispo');	
+		$type = $this->input->post('type');	
+		$data['pdts'] = $this->db_model->get_allpdt();
+
+		if($this->session->userdata('connecter')){
+			if($this->session->userdata('role') == 'A'){ 	
+				$this->db_model->ajout_pdt($stock,$nom, $description, $img, $dispo, $type);
+				$this->load->view('templates/menu_administrateur');
+				$this->load->view('produits_lister', $data);
+				$this->load->view('templates/bas');
+			}
+			else{
+				$this->session->sess_destroy();
+				redirect('accueil/afficher');
+			}
+		}
+		else{
+			$this->session->sess_destroy();
+			redirect('accueil/afficher');
+		}
+	}
 
 	public function modifier_variant($pdt_id, $variant_id){
 	    $couleur = $this->input->post('couleur');
@@ -213,17 +276,32 @@ class Products extends CI_Controller {
 	    }
 	}
 
-/*	public function ajout_panier($cpt_id)
-	{
-		$size = $this->input->post('size');
-		$color = $this->input->post('color');
-		$size_jr = $this->input->post('size_jr');
-		$qte = $this->input->post('quantity');
-		$data['panier'] = $this->db_model->ajout_panier($id_pdt,$size,$color,$qte);
-		// association du panier au compte de l'utilisateur 
-		$req = $this->db_model->association_panier($cpt_id)
-		//$this->load->view('pan',$data);
 
+	public function search()
+	{
+	    // Get the search term from the query parameter
+	    $searchTerm = $this->input->get('search');
+
+	    // Call a model method to fetch the filtered products based on the search term
+	    $data['pdts'] = $this->db_model->searchProducts($searchTerm);
+
+
+	    $this->load->view('templates/menu_administrateur');
+	    $this->load->view('produits_lister', $data);
+	    $this->load->view('templates/bas');
+	}
+
+	/*public function searchVariant()
+	{
+	    // Get the search term from the query parameter
+	    $searchTerm = $this->input->get('search');
+
+	    // Call a model method to fetch the filtered products based on the search term
+	   	$data['pdts'] = $this->db_model->searchVariant($searchTerm);
+
+	    $this->load->view('templates/menu_administrateur');
+	    $this->load->view('product_variant',$data);
+	    $this->load->view('templates/bas');
 	}*/
 }
 ?>

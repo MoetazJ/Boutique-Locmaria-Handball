@@ -1,6 +1,14 @@
 <h2>Variants du <?php echo $pdt_nom->pdt_nom ?></h2>
 <br />
 
+<!--  Search form 
+<form method="get" action="<?php //echo base_url('index.php/products/searchVariant'); ?>">
+    <div class="form-group">
+        <input type="text" name="search" class="form-control" placeholder="Rechercher une couleur, taille, sexe(H/F), ou prix du variant de ce produit">
+    </div>
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+</form> -->
+
 <?php if($variant != NULL): ?>
     <table style="border-collapse: collapse; width: 100%; margin-top: 20px; margin-bottom: 20px;">
         <thead>
@@ -9,7 +17,7 @@
                 <th>Couleur</th>
                 <th>Taille Adulte</th>
                 <th>Taille Junior</th>
-                                <th>Sexe</th>
+                <th>Sexe</th>
 
                 <th>Stock</th>
                 <th>Prix</th>

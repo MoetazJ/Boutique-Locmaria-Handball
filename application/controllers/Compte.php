@@ -96,10 +96,9 @@
 		
 	}
 
-	public function admin_backOffice(){
+	public function utilisateur(){
 		
 		$this->load->library('session');
-
 		$this->form_validation->set_rules('mail', 'mail', 'required');
 		$this->form_validation->set_rules('mdp', 'mdp', 'required');
 
@@ -149,11 +148,15 @@
 				echo "Vous eties deconnnecter";
 			}
 	}
+
+
 	public function logout(){
 		$this->session->sess_destroy();
 		redirect('compte/connecter');
 		
 	}
+
+
 	public function profil_admin(){
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'A'){ 	
@@ -227,28 +230,6 @@
 	}
 
 
-	public function produits(){
-		if($this->session->userdata('connecter')){ 	
-			if($this->session->userdata('role') == 'A'){ 	
-
-			$data['pdts'] = $this->db_model->get_allpdt();
-
-			$this->load->view('templates/menu_administrateur');
-			$this->load->view('produits_lister',$data);
-			$this->load->view('templates/bas');
-			}
-			else{
-				$this->session->sess_destroy();
-				redirect('compte/connecter');
-				echo "Vous etiez deconnnecter";
-			}
-		}		 
-		else{			
-			$this->session->sess_destroy();
-			redirect('compte/connecter');
-			echo "Vous etiez deconnnecter";
-		}
-	}
 
 
 	public function supprimer_pdt($id_pdt){
@@ -278,42 +259,7 @@
 	}
 
 	
-	//ajout d'un pdt
-	public function ajout()
-	{
-		$this->form_validation->set_rules('prix', 'prix', 'required');
-		$this->form_validation->set_rules('prixjr', 'prixjr', 'required');
-		$this->form_validation->set_rules('stock', 'stock', 'required');
-		$this->form_validation->set_rules('type', 'type', 'required');
-		$this->form_validation->set_rules('nom', 'nom', 'required');
-		$this->form_validation->set_rules('description', 'description', 'required');	
-
-		
-		$description = $this->input->post('description');
-		$stock = $this->input->post('stock');	
-		$nom = $this->input->post('nom');	
-		$img = $this->input->post('img');	
-		$dispo = $this->input->post('dispo');	
-		$type = $this->input->post('type');	
-		$data['pdts'] = $this->db_model->get_allpdt();
-
-		if($this->session->userdata('connecter')){
-			if($this->session->userdata('role') == 'A'){ 	
-				$this->db_model->ajout_pdt($stock,$nom, $description, $img, $dispo, $type);
-				$this->load->view('templates/menu_administrateur');
-				$this->load->view('produits_lister', $data);
-				$this->load->view('templates/bas');
-			}
-			else{
-				$this->session->sess_destroy();
-				redirect('accueil/afficher');
-			}
-		}
-		else{
-			$this->session->sess_destroy();
-			redirect('accueil/afficher');
-		}
-	}
+	
 
 
 	public function modif_compte($cpt_id){

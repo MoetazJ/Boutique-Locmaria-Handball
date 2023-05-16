@@ -46,3 +46,17 @@
 <?php else: ?>
     <p>Votre panier est vide.</p>
 <?php endif; ?>
+
+<style>
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 20vh;
+    }
+</style>
+
+<div class="center">
+    <button onclick="window.location.href = '<?php echo base_url(); ?>index.php/compte/commande';">Commander</button>
+</div>
+

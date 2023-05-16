@@ -22,21 +22,30 @@ class Db_model extends CI_Model {
 			INSERT INTO `cart_items` (`cart_item_id`, `cart_id`, `variant_id`, `quantity`) VALUES (NULL, '1', '4', '1');");
 		return $query->row();
 	}
+
+	
+	public function get_pdt_type($id_pdt) {
+	    $query = $this->db->query("SELECT pdt_type FROM t_produit_pdt WHERE pdt_id = '".$id_pdt."'");
+	    $result = $query->row();
+	    if ($result) {
+	        return $result->pdt_type;
+	    }
+	    return false;
+	}
+
+
 	public function get_color($id_pdt) {
-		$query = $this->db->query("SELECT color_name from colors
-					join product_variants USING(color_name) 
-					where pdt_id = ".$id_pdt." group by color_name;");
+		$query = $this->db->query("SELECT color_name from colors");
 		return $query->result_array();
 	}
 
-	public function get_size($id_pdt) {
-		$query = $this->db->query("SELECT size_name from sizes
-					join product_variants USING(size_name) 
-					where pdt_id = ".$id_pdt." group by size_name;");
-		return $query->result_array();
+	public function get_size($id_pdt, $type_pdt) {
+	    $query = $this->db->query("SELECT size_name FROM sizes WHERE type_pdt = '".$type_pdt."'");
+	    return $query->result_array();
 	}
 
-	public function verif_variant($id_pdt,$color,$size,$qte){
+
+	public function verif_variant($id_pdt,$color,$size,$qte,$sexe){
 				
 		$query = $this->db->query("SELECT variant_id, stock FROM product_variants
 										WHERE pdt_id = ".$id_pdt."
@@ -324,6 +333,27 @@ class Db_model extends CI_Model {
 			$query = $this->db->query("SELECT * FROM `order_items` GROUP by order_id"); 
 			return $query->result_array();
 		}
+
+		public function searchProducts($searchTerm){ 
+			$query = $this->db->query("SELECT * FROM `t_produit_pdt` where pdt_nom LIKE '%".$searchTerm."%' OR pdt_type LIKE '%".$searchTerm."%'"); 
+			if($query->num_rows() > 0)
+			{
+			 	return $query->result_array();
+			}
+			
+			return false;
+		}
+
+		public function searchVariant($searchTerm){ 
+			$query = $this->db->query("SELECT * FROM `product_variants` where color_name LIKE '%".$searchTerm."%' OR size_name LIKE '%".$searchTerm."%' OR sizejr_name LIKE '%".$searchTerm."%' OR stock LIKE '%".$searchTerm."%' OR price LIKE '%".$searchTerm."%' OR sexe LIKE '%".$searchTerm."%'"); 
+			if($query->num_rows() > 0)
+			{
+			 	return $query->result_array();
+			}
+			
+			return false;
+		}
+		
 }
 
 
