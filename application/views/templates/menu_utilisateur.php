@@ -55,7 +55,6 @@
         <ul>
           <li><a href="<?php echo base_url() ?>">Accueil</a></li>
           <li><a href="<?php echo base_url() ?>#portfolio">Produits</a></li>
-          <li><a href="<?php echo base_url() ?>">Mon profil utilisateur</a></li>
           <li><a href="<?php echo base_url() ?>index.php/products/panier">Panier</a></li>
 
           <li><a href="<?php echo base_url() ?>index.php/compte/logout">Deconnexion</a></li>

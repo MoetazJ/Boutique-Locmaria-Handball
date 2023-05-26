@@ -1,0 +1,1 @@
+ALTER TABLE `sizes` CHANGE `type_pdt` `type_pdt` ENUM('ballon','equipement','nourriture','autre','vetements','') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;

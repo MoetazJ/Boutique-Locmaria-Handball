@@ -63,14 +63,18 @@
         </div>
 
         <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order" data-aos="fade-up" data-aos-delay="100">
-
           <div>
+           
             <ul class="portfolio-flters">
               <li data-filter="*" class="filter-active">All</li>
-              <li data-filter=".filter-app">Vetemens de sport</li>
-              <li data-filter=".filter-product">Materiesls d'entrainements</li>
+
+              <?php foreach ($types as $type) {
+             ?>
+              <li data-filter=".filter-<?php echo $type['type_name'] ?>"><?php echo $type['type_name'] ?></li>
+              <!--<li data-filter=".filter-product">Materiesls d'entrainements</li>
               <li data-filter=".filter-branding">Branding</li>
-              <li data-filter=".filter-books">Books</li>
+              <li data-filter=".filter-books">Books</li> -->
+              <?php }?>
             </ul><!-- End Portfolio Filters -->
           </div>
           
@@ -79,9 +83,10 @@
               $x = 0; 
               if($produits != NULL) {
                 foreach($produits as $produit){
+                  if($produit['pdt_dispo'] == 'D' ){
             ?>
 
-                <div class="col-xl-4 col-md-6 portfolio-item filter-<?php echo $produit['pdt_type'] ?>">
+                <div class="col-xl-4 col-md-6 portfolio-item filter-<?php echo $produit['type_name'] ?>">
                   <div class="portfolio-wrap">
                     <a href="<?php echo base_url();?>style/img/<?php echo $produit['pdt_img']; ?>" class="glightbox">
                       <img src="<?php echo $this->config->base_url(); ?>style/img/<?php echo $produit['pdt_img']; ?>" class="img-fluid" alt="">
@@ -97,8 +102,9 @@
                 </div><!-- End Portfolio Item -->
 
             <?php 
-                 // fin de la boucle foreach
-              } }else { 
+                  }  // fin de la boucle foreach
+                } 
+              }else { 
                 echo "Aucun produit disponible en ce moment !"; 
               } 
             ?>

@@ -78,7 +78,7 @@
 
 
 				$session_data = array('mail' => $mail,
-					'id' => $id,
+					'id' => $id->cpt_id,
 					'prenom' => $prenom,
 					'nom' => $nom, 
 					'role' => $role->role_uti,
@@ -88,6 +88,7 @@
 			}
 			else
 			{
+				echo "Vos informations sont invalides";
 				$this->load->view('templates/haut');
 				$this->load->view('compte_connecter');
 				$this->load->view('templates/bas');
@@ -111,35 +112,25 @@
 			$prenom = $this->db_model->get_prenom($mail);
 			$nom= $this->db_model->get_nom($mail);
 			$id = $this->db_model->get_id($mail);
+			$validite = $this->db_model->get_validite($mail);
 
 			$session_data = array('mail' => $mail,
-				'id' => $id,
+				'id' => $id->cpt_id,
 				'prenom' => $prenom,
 				'nom' => $nom, 
 				'role' => $role->role_uti,
+				'validite' => $validite->compte_actif,
 				'connecter' => TRUE);	 		
 				$this->session->set_userdata($session_data);
-		}
-		else
-		{
-			$this->load->view('templates/haut');
-			$this->load->view('compte_connecter');
-			$this->load->view('templates/bas');
-		}
-
-
-		if($this->session->userdata('connecter')){ 	
+		
 			
 			if($this->session->userdata('role') == 'A'){ 	//administrateur 
 				$this->load->view('templates/menu_administrateur');
-
 				$this->load->view('accueil_admin');
-				$this->load->view('templates/bas');
 			}
 			else{// si non un utilisaateur connecte qui est redirige vers la page d'accueil
 				$this->load->view('templates/menu_utilisateur');
 				$this->load->view('accueil_admin');
-				$this->load->view('templates/bas');
 			}
 		}
 			else{
@@ -152,10 +143,49 @@
 
 	public function logout(){
 		$this->session->sess_destroy();
-		redirect('compte/connecter');
-		
+		redirect('compte/connecter');		
 	}
 
+
+
+	public function form_changemdp(){
+		//$data['cpt_id'] = $cpt_id;
+		if($this->session->userdata('connecter')){// verif de la connexion 
+			if($this->session->userdata('role') == 'A'){ //v verif que c un administrateur	
+				$this->load->view('templates/menu_administrateur');
+				$this->load->view('form_changemdp');
+			} 
+			else{
+				$this->load->view('templates/menu_administrateur');
+				$this->load->view('form_changemdp');
+			} 	
+		}
+
+	}
+
+	public function mdp(){
+		
+		$this->form_validation->set_rules('new_mdp', 'new_mdp', 'required');
+		$this->form_validation->set_rules('old_mdp', 'old_mdp', 'required');
+		$id = $this->session->userdata('id');
+
+		$old = $this->db_model->get_mdp($id);
+		$old_mdp = $this->input->post('old_mdp');
+		$new_mdp = $this->input->post('new_mdp');
+		if($this->session->userdata('connecter')){// verif de la connexion 
+			if(strcmp($old_mdp,$old->cpt_mdp) == 0 && strcmp($old_mdp,$new_mdp)!=0 ){
+				$this->db_model->update_mdp($id,$new_mdp); 
+				echo "Votre mot de passe a etait change."; 
+				redirect('compte/connecter');
+			}
+
+			else{
+				echo "Les donnees que vous avez rentrer ne sont pas valides";
+				redirect('form_changemdp');
+			}
+		}	
+	}
+	
 
 	public function profil_admin(){
 		if($this->session->userdata('connecter')){
@@ -207,14 +237,35 @@
 	}
 
 	public function commandes(){
-			if($this->session->userdata('connecter')){ 	
+		if($this->session->userdata('connecter')){ 	
 			if($this->session->userdata('role') == 'A'){ 	
 
 			$data['cmds'] = $this->db_model->get_cmds();
 
 			$this->load->view('templates/menu_administrateur');
 			$this->load->view('cmds',$data);
-			$this->load->view('templates/bas');
+			}
+			else{
+				$this->session->sess_destroy();
+				redirect('compte/connecter');
+				echo "Vous etiez deconnnecter";
+			}
+		}		 
+		else{			
+			$this->session->sess_destroy();
+			redirect('compte/connecter');
+			echo "Vous etiez deconnnecter";
+		}
+	}	
+
+	public function voir_commandes($order_id){
+		if($this->session->userdata('connecter')){ 	
+			if($this->session->userdata('role') == 'A'){ 	
+			$data['order_id'] = $order_id;
+			$data['details_commande'] = $this->db_model->get_order_details($order_id);
+
+			$this->load->view('templates/menu_administrateur');
+			$this->load->view('voir_commande',$data);
 			}
 			else{
 				$this->session->sess_destroy();
@@ -281,5 +332,7 @@
 			redirect('accueil/afficher');
 		}
 	}
+
+
 
 }

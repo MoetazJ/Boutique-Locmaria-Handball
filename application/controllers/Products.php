@@ -10,6 +10,7 @@ class Products extends CI_Controller {
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 	}
+	//afficher un produit avec un id x
 	public function afficher($id_pdt)
 	{
 		
@@ -17,23 +18,39 @@ class Products extends CI_Controller {
 		$data['produit'] = $this->db_model->pdt($id_pdt);
 		$data['color'] = $this->db_model->get_color($id_pdt);
 		$data['size'] = $this->db_model->get_size($id_pdt,$data['type']);
-
-		$this->load->view('templates/menu_utilisateur');
-		//Chargement de la view du milieu : page_accueil.php
-		$this->load->view('produit',$data);
-		//Chargement de la view bas.php
-		$this->load->view('templates/bas');
-
+		if($this->session->userdata('connecter')){
+			if($this->session->userdata('role') == 'U'){//profil admin 	
+				$this->load->view('templates/menu_utilisateur');
+				if($data['type']->type_name == 'Nourriture'){
+					$this->load->view('produit_food',$data);
+				}
+				else {
+					$this->load->view('produit',$data);
+				}
+				//Chargement de la view bas.php
+				$this->load->view('templates/bas');
+			}
+		}
+		else {
+			$this->load->view('templates/haut');
+			if($data['type']->type_name == 'Nourriture'){
+					$this->load->view('produit_food',$data);
+				}
+				else {
+					$this->load->view('produit',$data);
+				}
+			$this->load->view('templates/bas');
+		}
 	}
+
+
 
 	public function choix_variants($pdt_id){
 
 		$this->form_validation->set_rules('color', 'color', 'required');
 		$this->form_validation->set_rules('sizejr', 'sizejr', 'required');	
 		$this->form_validation->set_rules('size', 'size', 'required');		
-	
 		$this->form_validation->set_rules('qte', 'qte', 'required');		
-
 		$choix = $this->input->post('choix'); 
 
 		$color = $this->input->post('color');
@@ -83,11 +100,12 @@ class Products extends CI_Controller {
 	}
 
 	public function produits(){
+
 		if($this->session->userdata('connecter')){ 	
 			if($this->session->userdata('role') == 'A'){ 	
 
 			$data['pdts'] = $this->db_model->get_allpdt();
-
+			$data['product_types'] = $this->db_model->get_types_pdts();	
 			$this->load->view('templates/menu_administrateur');
 			$this->load->view('produits_lister',$data);
 			$this->load->view('templates/bas');
@@ -162,7 +180,7 @@ class Products extends CI_Controller {
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'A'){
 				$this->db_model->modif_pdt($pdt_id, $nom,  $type, $img, $dispo);
-				redirect('compte/produits');
+				redirect('products/produits');
 			}
 			else
 			{
@@ -178,15 +196,27 @@ class Products extends CI_Controller {
 		
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'A'){
-				$data['variant'] = $this->db_model->variant($pdt_id);
+				$data['variant'] = $this->db_model->variant($pdt_id); //variant de vetements
+				$data['variant_food'] = $this->db_model->variant_food($pdt_id);
+
 				$data['pdt_id'] = $pdt_id;
 				$data['pdt_nom'] = $this->db_model->get_pdt_nom($pdt_id);
-				$data['sizes'] = $this->db_model->sizes();
-				$data['couleurs'] = $this->db_model->couleurs();
+				$data['type'] = $this->db_model->get_pdt_type($pdt_id);
 
-				$this->load->view('templates/menu_administrateur');
-				$this->load->view('product_variant', $data);
-				$this->load->view('templates/bas');
+				$data['sizes'] = $this->db_model->sizes($data['type']);
+				$data['couleurs'] = $this->db_model->couleurs();
+				//verifiacation du tyope du produit 
+				if($data['type']->type_name == 'Nourriture'){
+					$this->load->view('templates/menu_administrateur');
+					$this->load->view('product_variant_food', $data);
+					$this->load->view('templates/bas');
+				}
+				else{
+					$this->load->view('templates/menu_administrateur');
+					$this->load->view('product_variant', $data);
+					$this->load->view('templates/bas');
+				}
+				
 			}
 
 			else
@@ -197,6 +227,41 @@ class Products extends CI_Controller {
 			}
 		}
 	}
+
+	public function ajout_variant($pdt_id){
+
+	    $couleur = $this->input->post('couleur');
+	    $taille = $this->input->post('taille');
+	    $choix = $this->input->post('choix'); 
+	    $stock = $this->input->post('stock'); 
+	    $price = $this->input->post('price'); 
+	    $sexe = $this->input->post('sexe');
+	    $data['type'] = $this->db_model->get_pdt_type($pdt_id);
+
+	    $data['type'] = $this->db_model->get_pdt_type($pdt_id);
+	    $choix = $this->input->post('choix');;
+	    $price = $this->input->post('price');
+	    $carac1 = $this->input->post('car1');
+	    $carac2 = $this->input->post('car2');
+	    if($this->session->userdata('connecter')){
+	        if($this->session->userdata('role') == 'A'){
+	        	if($data['type']->type_name == 'Nourriture'){
+	        		$this->db_model->ajout_variant_food($pdt_id,  $choix, $price, $carac1, $carac2,$carac3, $$data['type']);
+	        	}
+	        	else {
+	        		$this->db_model->ajout_variant($pdt_id, $couleur, $taille, $choix, $price, $stock, $sexe);
+
+	        	}
+	            redirect('products/voir_variants/'.$pdt_id);
+	        }
+	        else{
+	            $this->load->view('templates/haut');
+	            $this->load->view('compte_connecter');
+	            $this->load->view('templates/bas');
+	        }
+	    }
+	}
+
 	//ajout d'un pdt
 	public function ajout()
 	{
@@ -219,9 +284,7 @@ class Products extends CI_Controller {
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'A'){ 	
 				$this->db_model->ajout_pdt($stock,$nom, $description, $img, $dispo, $type);
-				$this->load->view('templates/menu_administrateur');
-				$this->load->view('produits_lister', $data);
-				$this->load->view('templates/bas');
+				redirect('products/produits');
 			}
 			else{
 				$this->session->sess_destroy();
@@ -235,46 +298,42 @@ class Products extends CI_Controller {
 	}
 
 	public function modifier_variant($pdt_id, $variant_id){
+
 	    $couleur = $this->input->post('couleur');
 	    $taille = $this->input->post('taille');
 	    $taillejr = $this->input->post('taillejr'); 
 	    $stock = $this->input->post('stock'); 
 	    $price = $this->input->post('price'); 
 	    $sexe = $this->input->post('sexe');
+	    
+	    $data['type'] = $this->db_model->get_pdt_type($pdt_id);
+	    $choix = $this->input->post('choix');
+	    var_dump($choix);
 
+	    $price = $this->input->post('price');
+	    $carac1 = $this->input->post('car1');
+	    $carac2 = $this->input->post('car2');
+	    $carac3 = $this->input->post('car3');
 	    if($this->session->userdata('connecter')){
 	        if($this->session->userdata('role') == 'A'){
-	            $this->db_model->modifier_variant($pdt_id, $variant_id, $couleur, $taille, $taillejr, $price, $stock,$sexe);
-	            redirect('products/voir_variants/'.$pdt_id);
-	        }
-	        else{
-	            $this->load->view('templates/haut');
-	            $this->load->view('compte_connecter');
-	            $this->load->view('templates/bas');
-	        }
+	        	if($data['type']->type_name != 'Nourriture'){
+	            	$this->db_model->modifier_variant($pdt_id, $variant_id, $couleur, $taille, $taillejr, $price, $stock,$sexe);
+	       		}
+		        else {
+		        	$this->db_model->modifier_variant_food($pdt_id,$variant_id,  $choix, $price, $carac1, $carac2,$carac3, $data['type']->type_name);
+		        }
+	        redirect('products/voir_variants/'.$pdt_id);
+	        } 
+	    }
+
+	    else {
+            $this->load->view('templates/haut');
+            $this->load->view('compte_connecter');
+            $this->load->view('templates/bas');
 	    }
 	}
 
-	public function ajout_variant($pdt_id){
-	    $couleur = $this->input->post('couleur');
-	    $taille = $this->input->post('taille');
-	    $choix = $this->input->post('choix'); 
-	    $stock = $this->input->post('stock'); 
-	    $price = $this->input->post('price'); 
-	    $sexe = $this->input->post('sexe');
 
-	    if($this->session->userdata('connecter')){
-	        if($this->session->userdata('role') == 'A'){
-	            $this->db_model->ajout_variant($pdt_id, $couleur, $taille, $choix, $price, $stock, $sexe);
-	            redirect('products/voir_variants/'.$pdt_id);
-	        }
-	        else{
-	            $this->load->view('templates/haut');
-	            $this->load->view('compte_connecter');
-	            $this->load->view('templates/bas');
-	        }
-	    }
-	}
 
 
 	public function search()

@@ -12,6 +12,8 @@
         echo "<br>";
         echo ".<br>";
     ?>
+        <?php if($produit->type_name == 'vetements') { // si le produit esrt un vetements on affiche le chamos de choisi du sexe?>
+
     <div class="form-group">
     <select class="form-control" name="choix">
       <option value="adulte">Taille Adulte</option>
@@ -19,15 +21,16 @@
     </select>
     </div>
 
+
     <div class="form-group">
         <label for="exampleFormControlSelect1">Sexe : </label>
-
     <select class="form-control" name="sexe">
       <option value="H">Homme</option>
       <option value="F">Femme</option>
     </select>
     </div>
-
+    <?php }?>
+    
     <div class="form-group">
         <label for="exampleFormControlSelect1">Taille:</label>
         <select class="form-control" name="size">

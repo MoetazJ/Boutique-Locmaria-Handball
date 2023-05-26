@@ -10,6 +10,7 @@ class Accueil extends CI_Controller {
 	 public function afficher()
 	 {
 	 	$data['produits'] = $this->db_model->afficher_pdt();
+	 	$data['types'] = $this->db_model->get_types(); 
 		if($this->session->userdata('connecter')){
 		
 			$this->load->view('templates/menu_utilisateur');
