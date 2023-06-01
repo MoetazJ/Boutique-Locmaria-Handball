@@ -56,13 +56,7 @@
           <li><a href="<?php echo base_url() ?>index.php/compte/commandes">Commandes</a></li>
           <li><a href="<?php echo base_url() ?>index.php/compte/lister_profils">Utilisateurs</a></li>
           <li><a href="<?php echo base_url() ?>index.php/products/produits">Produits</a></li>
-
           <li><a href="<?php echo base_url() ?>index.php/compte/logout">Deconnexion</a></li>
-
-
-
-
-          <li><a href="#contact">Contact</a></li>
         </ul>
       </nav><!-- .navbar -->
 

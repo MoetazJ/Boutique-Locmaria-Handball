@@ -12,7 +12,7 @@
         echo "<br>";
         echo ".<br>";
     ?>
-        <?php if($produit->type_name == 'vetements') { // si le produit esrt un vetements on affiche le chamos de choisi du sexe?>
+        <?php if($produit->type_name != 'Nourriture') { // si le produit est un vetements on affiche le champs de choisi du sexe?>
 
     <div class="form-group">
     <select class="form-control" name="choix">
@@ -29,18 +29,8 @@
       <option value="F">Femme</option>
     </select>
     </div>
-    <?php }?>
-    
-    <div class="form-group">
-        <label for="exampleFormControlSelect1">Taille:</label>
-        <select class="form-control" name="size">
-            <?php foreach ($size as $taille) { ?>
-                <option value="<?php echo $taille['size_name']; ?>"><?php echo $taille['size_name']; ?></option>
-            <?php } ?>
-        </select>
-    </div>
 
-    <div class="form-group">
+     <div class="form-group">
         <label for="exampleFormControlSelect1">Couleur:</label>
         <select class="form-control" id="exampleFormControlSelect1" name="color">
             <?php foreach ($color as $clr) { ?>
@@ -49,6 +39,18 @@
         </select>
     </div>
 
+    <?php }?>
+    
+    <div class="form-group">
+        <label for="exampleFormControlSelect1">Taille :</label>
+        <select class="form-control" name="size">
+            <?php foreach ($size as $taille) { ?>
+                <option value="<?php echo $taille['size_name']; ?>"><?php echo $taille['size_name']; ?></option>
+            <?php } ?>
+        </select>
+    </div>
+
+   
 
     <br>
     

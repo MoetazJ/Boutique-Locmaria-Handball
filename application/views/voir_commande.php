@@ -13,7 +13,12 @@
         <tbody>
             <?php foreach($details_commande as $details): ?>
                 <tr>
-                    <td><?php echo $details['variant_id'] ?></td>
+                    <td><?php $data['variant'] = $this->db_model->get_variant_details($details['variant_id']);
+                     if ($data['variant'] != NULL) {
+                        var_dump($data['variant']->pdt_nom) ; ?>                    
+                    }  
+                    <?php>
+                    </td>
                     <td><?php echo $details['autre_id']; ?></td>
                     <td><?php echo $details['quantity']; ?></td>
                 <!--<td><a href="<?php// echo base_url('commande/supprimer/'.$cmd['cmd_id']); ?>">Supprimer</a></td> -->

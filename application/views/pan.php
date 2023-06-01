@@ -5,8 +5,8 @@
         <thead>
             <tr>
                 <th>Produit</th>
-                <th>Taille</th>
                 <th>Couleur</th>
+
                 <th>Taille</th>
                 <th>Prix unitaire</th>
                 <th>Quantite</th>
@@ -22,8 +22,8 @@
                     $total += $prix_total;
             ?>
                 <tr>
-                    <td><?php echo $item['cart_id']; ?></td>
-                    <td><?php echo $item['variant_id']; ?></td>
+                    
+                    <td><?php $pdt_name = $this->db_model->get_pdt_nom_from_vi($item['variant_id']); echo $pdt_name->pdt_nom; ?></td>
                     <td><?php echo $item['color_name']; ?></td>
                     <td><?php echo $item['size_name'] ? $item['size_name'] : $item['sizejr_name']; ?></td>
                     <td><?php echo $item['price']; ?>€</td>

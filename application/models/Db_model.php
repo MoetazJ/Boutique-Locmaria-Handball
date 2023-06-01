@@ -58,6 +58,24 @@ class Db_model extends CI_Model {
 	    return $query->result_array();
 	}
 
+	// pour l'instant je peux verifier que avec la taille et l'id du produit parce que je sais pas les caracteres de la nourritures qu'il y a
+	public function verif_variant_food($id_pdt,$taille){
+				
+		$query = $this->db->query("SELECT autre_id FROM autre_variants
+										WHERE pdt_id = ".$id_pdt."
+										AND size_name = '".$taille."' ;"); 
+		if ($query->num_rows() <= 0){
+        return false;
+	    }
+	    
+	    $row = $query->row();
+	    if (!$row) {
+	        return false;
+	    }
+
+	    return $row;
+	}
+
 
 	public function verif_variant($id_pdt,$color,$size,$qte,$sexe){
 				
@@ -66,18 +84,18 @@ class Db_model extends CI_Model {
 										AND color_name = '".$color."'
 										AND size_name = '".$size."'
 										AND sexe = '".$sexe."'
-
 										AND ('".$qte."' <= stock);"); 
 		if ($query->num_rows() <= 0){
-		        return false;
-		    }
-		    
-		    $row = $query->row();
-		    if (!$row) {
-		        return false;
-		    }
+        return false;
+	    }
+	    
+	    $row = $query->row();
+	    if (!$row) {
+	        return false;
+	    }
 
-		    return $row;
+	    return $row;
+
 	}
 
 
@@ -117,7 +135,7 @@ class Db_model extends CI_Model {
 	}
 
 	public function insert_panier($cpt_id,$variant,$qte){
-		$query = $this->db->query("INSERT into cart_items values(NULL, '".$cpt_id."', '".$variant."', '".$qte."' );");
+		$query = $this->db->query("INSERT into cart_items values(NULL, '".$cpt_id."', '".$variant."','".$qte."' );");
 		return ($query);
 	}
 
@@ -288,24 +306,26 @@ class Db_model extends CI_Model {
 
 	public function modifier_variant($pdt_id, $variant_id,  $couleur,$taille, $taillejr, $price, $stock, $sexe){
 		if($taille == ""){
-
-	    $query = "UPDATE `product_variants` SET `color_name` = '".$couleur."', `sizejr_name` = '".$taillejr."', `stock` = '".$stock."', `sexe` = '".$sexe."', price = '".$price."' WHERE  `pdt_id` = '".$pdt_id."' AND variant_id = '".$variant_id."';";
-	}
-	else{
-		$query = "UPDATE `product_variants` SET `color_name` = '".$couleur."', `size_name` = '".$taille."', `stock` = '".$stock."', `sexe` = '".$sexe."', price = '".$price."' WHERE  `pdt_id` = '".$pdt_id."' AND variant_id = '".$variant_id."';";
-
-	}
+	    	$query = "UPDATE `product_variants` SET `color_name` = '".$couleur."', `sizejr_name` = '".$taillejr."', `stock` = '".$stock."', `sexe` = '".$sexe."', price = '".$price."' WHERE  `pdt_id` = '".$pdt_id."' AND variant_id = '".$variant_id."';";
+		}
+		else{
+			$query = "UPDATE `product_variants` SET `color_name` = '".$couleur."', `size_name` = '".$taille."', `stock` = '".$stock."', `sexe` = '".$sexe."', price = '".$price."' WHERE  `pdt_id` = '".$pdt_id."' AND variant_id = '".$variant_id."';"; 
+		}
 	    $this->db->query($query);
     	return ($query);
 	}
 
-	public function modifier_variant_food($pdt_id,$variant_id,  $choix, $price, $carac1, $carac2,$carac3, $type){
-		var_dump($choix);
+	public function modifier_variant_food($pdt_id,$variant_id, $choix, $price, $carac1, $carac2,$carac3, $type){
+
 
 	    $query = "UPDATE `autre_variants` SET size_name = '".$choix."' ,`car1` = '".$carac1."', `car2` = '".$carac2."', `car3` = '".$carac3."', prix = '".$price."' WHERE  `pdt_id` = '".$pdt_id."' ;";
-		var_dump($query);
 	    $this->db->query($query);
     	return ($query);
+	}
+
+	public function supprimer_variant($variant_id){
+		$query = $this->db->query("DELETE FROM `product_variants` WHERE `product_variants`.`variant_id` = '".$variant_id."';");
+		return ($query);
 	}
 
 	public function variant_food($id_pdt) {
@@ -320,20 +340,35 @@ class Db_model extends CI_Model {
 	}
 
 
-	public function ajout_variant($pdt_id, $couleur, $taille, $choix, $price, $stock, $sexe){
-		if(strcmp($choix, "adulte") == 0){
-			$query = "INSERT INTO `product_variants`  VALUES
-	    		(NULL,'".$pdt_id."', '".$couleur."', '".$taille."',  NULL, '".$stock."', '".$price."', '".$sexe."')";
-		}
-		else{
-			$query = "INSERT INTO `product_variants`  VALUES
-	    		(NULL,'".$pdt_id."', '".$couleur."', NULL, '".$taille."',   '".$stock."', '".$price."', '".$sexe."')";
+	public function ajout_variant($pdt_id, $couleur, $taille, $choix, $price, $stock, $sexe) {
+	    // Vérifier si le variant existe déjà
+	    $query = "SELECT COUNT(*) AS count FROM `product_variants` WHERE `pdt_id` = '".$pdt_id."' and  `color_name` = '".$couleur."' and sexe = '".$sexe."' ";
 
-		}
-	    
-	    $this->db->query($query);          
+	    if (strcmp($choix, "adulte") == 0) {
+	        $query .= " AND `size_name` = '".$taille."'";
+	    } else {
+	        $query .= " AND `sizejr_name` = '".$taille."'";
+	    }
+
+	    $result = $this->db->query($query);
+	    $row = $result->row();
+
+	    if ($row->count > 0) {
+	        // Le variant existe déjà, ne pas l'ajouter
+	        return false;
+	    }
+
+	    // Le variant n'existe pas, on peut l'ajouter à la base de données
+	    if (strcmp($choix, "adulte") == 0) {
+	        $query = "INSERT INTO `product_variants` VALUES (NULL, '".$pdt_id."', '".$couleur."', '".$taille."', NULL, '".$stock."', '".$price."', '".$sexe."')";
+	    } else {
+	        $query = "INSERT INTO `product_variants` VALUES (NULL, '".$pdt_id."', '".$couleur."', NULL, '".$taille."', '".$stock."', '".$price."', '".$sexe."')";
+	    }
+
+	    $this->db->query($query);
+
 	    return true;
-	}
+}
 
 	public function ajout_variant_food($pdt_id,  $choix, $price, $carac1, $carac2,$carac3, $type){
 		
@@ -361,7 +396,7 @@ class Db_model extends CI_Model {
 	}
 
 	public function sizes($type){
-		var_dump($type->type_name);
+
 		$query = $this->db->query("SELECT * from sizes where type_name = '".$type->type_name."' ;");
 		return $query->result_array();
 	}
@@ -403,7 +438,7 @@ class Db_model extends CI_Model {
 
 	
 	public function get_variant_details($variant_id){
-		$query = $this->db->query("SELECT * from product_variants where variant_id ='".$id."' ;");
+		$query = $this->db->query("SELECT * from product_variants left join t_produit_pdt using(pdt_id) where variant_id ='".$variant_id."' ;");
 		return $query->row();
 	}
 	public function get_autre_variants_details($autre_id){
@@ -411,7 +446,10 @@ class Db_model extends CI_Model {
 		return $query->row();
 	}
 
-		
+	public function get_pdt_nom_from_vi($variant_id){
+		$query = $this->db->query("SELECT pdt_nom from t_produit_pdt join product_variants USING(pdt_id) where variant_id = '".$variant_id."'; "); 
+		return $query->row();
+	}
 }
 
 

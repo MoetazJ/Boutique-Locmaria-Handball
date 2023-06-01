@@ -61,13 +61,17 @@
 <h4>Ajouter un produit</h4>
 <br>
 <div class="form-group">
-    <input type="text" name="nom" class="form-control" placeholder="Nom du produit" required>
+    <label>Nom du produit :</label>
+    <input type="text" name="nom" class="form-control" placeholder="Exemple : Survetement Hummel H/F" required>
 </div>
 <div class="form-group">
-    <textarea name="description" class="form-control" placeholder="Description" required></textarea>
+    <label>Description : </label>
+    <textarea name="description" class="form-control" placeholder="Decrivez le produit en quelques phrases" required></textarea>
 </div>
 <br>
 <div class="form-group">
+        <label for="exampleFormControlSelect1">Type du produit :</label>
+
     <select class="form-control" name="type">
         <?php foreach ($product_types as $product_type) { ?>
             <option value="<?php echo $product_type['type_name']; ?>"><?php echo $product_type['type_name']; ?></option>
@@ -75,7 +79,8 @@
     </select>
 </div>
 <div class="form-group">
-    <input type="text" class="form-control" name="img" placeholder="Image" required>
+    <label>Nom de l'image :</label>
+    <input type="text" class="form-control" name="img" placeholder="Exemple : survetement.png" required>
 </div>
 <div class="form-group">
     <label for="exampleFormControlSelect1">Disponibilite (D pour disponible et N pour non disponible)</label>

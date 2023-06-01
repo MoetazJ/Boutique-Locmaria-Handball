@@ -59,7 +59,6 @@
 
           <li><a href="<?php echo base_url() ?>index.php/compte/logout">Deconnexion</a></li>
 
-          <li><a href="#contact">Contact</a></li>
         </ul>
       </nav><!-- .navbar -->
 
