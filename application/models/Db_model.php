@@ -397,10 +397,10 @@ class Db_model extends CI_Model {
 
 	public function sizes($type){
 
-		$query = $this->db->query("SELECT * from sizes where type_name = '".$type->type_name."' ;");
+		$query = $this->db->query("SELECT * from sizes ;");
 		return $query->result_array();
 	}
-
+	//where type_name = '".$type->type_name."' 
 	public function couleurs(){ 
 		$query = $this->db->query("SELECT * from colors"); 
 		return $query->result_array();
@@ -442,13 +442,17 @@ class Db_model extends CI_Model {
 		return $query->row();
 	}
 	public function get_autre_variants_details($autre_id){
-		$query = $this->db->query("SELECT * from autre_variants where autre_id ='".$autre_id."' ;");
+		$query = $this->db->query("SELECT * from autre_variants left join t_produit_pdt using(pdt_id) where autre_id ='".$autre_id."' ;");
 		return $query->row();
 	}
 
 	public function get_pdt_nom_from_vi($variant_id){
 		$query = $this->db->query("SELECT pdt_nom from t_produit_pdt join product_variants USING(pdt_id) where variant_id = '".$variant_id."'; "); 
 		return $query->row();
+	}
+	public function ajout_taille($nouv_taille){
+		$query = $this->db->query("INSERT INTO `sizes` (`size_name`, `type_name`) VALUES ('".$nouv_taille."', ''); ");
+			return ($query);
 	}
 }
 

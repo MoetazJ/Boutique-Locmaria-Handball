@@ -62,6 +62,7 @@ echo form_open('products/ajout_variant/'.$pdt_id);
 <br>
 
 
+
 <div class="form-group">
     <select class="form-control" name="choix">
 

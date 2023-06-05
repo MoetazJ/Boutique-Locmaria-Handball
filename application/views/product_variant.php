@@ -122,6 +122,8 @@ echo form_open('products/ajout_variant/'.$pdt_id);
 ?>
 <br>
 <h4>Ajouter un variant pour <?php echo $pdt_nom->pdt_nom ?></h4>
+Si vous trouver pas les tailles que vous voulez assignez pour votre nouveau produit vous pouvez les <a href="<?php echo base_url()?>index.php/products/form_size">ajouter.</a>
+
 <br>
 
 <div class="form-group">

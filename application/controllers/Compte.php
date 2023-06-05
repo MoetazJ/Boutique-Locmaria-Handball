@@ -263,9 +263,7 @@
 			if($this->session->userdata('role') == 'A'){ 	
 			$data['order_id'] = $order_id;
 			$data['details_commande'] = $this->db_model->get_order_details($order_id);
-			/*$data['variant'] = $this->db_model->get_variant_details($data['details_commande']->variant_id);
-						$data['autre'] = $this->db_model->get_autre_details($data['details_commande']->autre_id);*/
-
+			//$data['variant'] = $this->db_model->get_variant_details($data['details_commande']->variant_id);
 			$this->load->view('templates/menu_administrateur');
 			$this->load->view('voir_commande',$data);
 			}

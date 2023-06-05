@@ -1,31 +1,47 @@
-<h2>Details de la commande numero <?php echo $order_id?> </h2>
+<h2>Détails de la commande numéro <?php echo $order_id; ?></h2>
 <p><br></p>
-<?php if($details_commande != NULL): ?>
+<?php
+$prix = 0;
+$total = 0;
+if ($details_commande != NULL):
+?>
     <table style="border-collapse: collapse; width: 100%; margin-top: 20px; margin-bottom: 20px;">
         <thead>
             <tr>
-                <th>Variant ID</th>
-                <th>Plat id</th>
-                <th>Quantite</th>
-                
+                <th>Variant</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Prix total</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach($details_commande as $details): ?>
                 <tr>
-                    <td><?php $data['variant'] = $this->db_model->get_variant_details($details['variant_id']);
-                     if ($data['variant'] != NULL) {
-                        var_dump($data['variant']->pdt_nom) ; ?>                    
-                    }  
-                    <?php>
+                    <td>
+                        <?php
+                        $data['variant'] = $this->db_model->get_variant_details($details['variant_id']);
+                        $data['autre'] = $this->db_model->get_autre_variants_details($details['autre_id']);
+                        if ($data['variant'] != NULL) {
+                            echo $data['variant']->pdt_nom;
+                            $prix = $data['variant']->price;
+                        } elseif ($data['autre'] != NULL) {
+                            echo $data['autre']->pdt_nom;
+                            $prix = $data['autre']->prix;
+                        }
+                        ?>
                     </td>
-                    <td><?php echo $details['autre_id']; ?></td>
                     <td><?php echo $details['quantity']; ?></td>
-                <!--<td><a href="<?php// echo base_url('commande/supprimer/'.$cmd['cmd_id']); ?>">Supprimer</a></td> -->
+                    <td><?php echo $prix; ?></td>
+                    <td><?php
+                        $prix_total = $prix * $details['quantity'];
+                        echo $prix_total; echo "€";
+                        $total += $prix_total;
+                        ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-    <?php else: ?>
-    <p>Aucun variant n'a été trouvée.</p>
+    <p>Prix total de la commande : <?php echo $total; ?> €</p>
+<?php else: ?>
+    <p>Aucun variant n'a été trouvé.</p>
 <?php endif; ?>

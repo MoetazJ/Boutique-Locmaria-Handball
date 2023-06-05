@@ -140,6 +140,17 @@ class Products extends CI_Controller {
 		}
 	}
 
+	public function form_size(){
+		if($this->session->userdata('connecter') && $this->session->userdata('role') == 'A'){ 	
+			$this->load->view('templates/menu_administrateur');
+			$this->load->view('form_size');
+		}				 
+		else{			
+			$this->session->sess_destroy();
+			redirect('compte/connecter');
+			echo "Vous etiez deconnnecter";
+		}
+	}
 
 	//afficher panier
 	public function Panier(){
@@ -358,6 +369,18 @@ class Products extends CI_Controller {
 		    $this->load->view('templates/menu_administrateur');
 		    $this->load->view('produits_lister', $data);
 		    $this->load->view('templates/bas');
+		}
+		else{
+			redirect('compte/logout');
+		}
+	}
+
+	public function ajout_taille(){
+		if($this->session->userdata('connecter') && $this->session->userdata('role') == 'A'){
+			$nouv_taille = $this->input->post('nouv_taille');
+			$this->db_model->ajout_taille($nouv_taille);
+			redirect('products/produits');
+
 		}
 		else{
 			redirect('compte/logout');
