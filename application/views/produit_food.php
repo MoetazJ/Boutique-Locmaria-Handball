@@ -5,6 +5,8 @@
       <img src="<?php echo base_url();?>style/img/<?php echo $produit->pdt_img?>" alt="" style="display:block; margin:auto;">
       <h3><?php echo $produit->pdt_nom ?></h3>
       <br>
+      <h5><?php echo $prix->price; ?> € <h5>
+        <br> 
       <?php echo $produit->pdt_description; ?>
       <br><br>
 

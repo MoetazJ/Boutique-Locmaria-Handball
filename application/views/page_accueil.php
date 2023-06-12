@@ -6,7 +6,6 @@
           <h2>Bienvenue a la boutique <span>Locmaria</span></h2>
           <p>Club de Handball situé à la pointe du Finistère. #VenezVibrez</p>
           <div class="d-flex justify-content-center justify-content-lg-start">
-            <a href="#about" class="btn-get-started">Get Started</a>
             <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
           </div>
         </div>
@@ -23,28 +22,28 @@
           <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-easel"></i></div>
-              <h4 class="title"><a href="" class="stretched-link">Packs du moments</a></h4>
+              <h4 class="title"><a href="<?php echo base_url() ?>#portfolio" class="stretched-link">Packs du moments</a></h4>
             </div>
           </div><!--End Icon Box -->
 
           <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-gem"></i></div>
-              <h4 class="title"><a href="" class="stretched-link">Materiels d'entrainement</a></h4>
+              <h4 class="title"><a href="<?php echo base_url() ?>#portfolio" class="stretched-link">Materiels d'entrainement</a></h4>
             </div>
           </div><!--End Icon Box -->
 
           <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-geo-alt"></i></div>
-              <h4 class="title"><a href="" class="stretched-link">Tenues sportifs</a></h4>
+              <h4 class="title"><a href="<?php echo base_url() ?>#portfolio" class="stretched-link">Tenues sportifs</a></h4>
             </div>
           </div><!--End Icon Box -->
 
           <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="500">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-command"></i></div>
-              <h4 class="title"><a href="" class="stretched-link">Evenements</a></h4>
+              <h4 class="title"><a href="<?php echo base_url() ?>index.php/products/evenements" class="stretched-link">Evenements</a></h4>
             </div>
           </div><!--End Icon Box -->
         </div>
@@ -71,9 +70,7 @@
               <?php foreach ($types as $type) {
              ?>
               <li data-filter=".filter-<?php echo $type['type_name'] ?>"><?php echo $type['type_name'] ?></li>
-              <!--<li data-filter=".filter-product">Materiesls d'entrainements</li>
-              <li data-filter=".filter-branding">Branding</li>
-              <li data-filter=".filter-books">Books</li> -->
+             
               <?php }?>
             </ul><!-- End Portfolio Filters -->
           </div>

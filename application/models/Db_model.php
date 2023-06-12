@@ -100,22 +100,18 @@ class Db_model extends CI_Model {
 
 
 	public function verif_variantjr($id_pdt, $color, $sizejr, $qte, $sexe){
+
 		$query = $this->db->query("SELECT variant_id,stock FROM product_variants
                            WHERE pdt_id = ".$id_pdt."
                            AND color_name = '".$color."'
                            AND sizejr_name = '".$sizejr."'
-                           AND sexe = '".$sexe."'
+                           
                            AND ('".$qte."' <= stock);");
 		if ($query->num_rows() <= 0){
-        return false;
+        	return false;
 	    }
 	    
-	    $row = $query->row();
-	    if (!$row) {
-	        return false;
-	    }
-
-	    return $row;
+	   	return $query->row();
 	}
 
 	public function get_id($mail){
@@ -135,7 +131,7 @@ class Db_model extends CI_Model {
 	}
 
 	public function insert_panier($cpt_id,$variant,$qte){
-		$query = $this->db->query("INSERT into cart_items values(NULL, '".$cpt_id."', '".$variant."','".$qte."' );");
+		$query = $this->db->query("INSERT into cart_items values(NULL, '".$cpt_id."', '".$variant."','".$qte."' ,NULL);");
 		return ($query);
 	}
 
@@ -450,9 +446,18 @@ class Db_model extends CI_Model {
 		$query = $this->db->query("SELECT pdt_nom from t_produit_pdt join product_variants USING(pdt_id) where variant_id = '".$variant_id."'; "); 
 		return $query->row();
 	}
-	public function ajout_taille($nouv_taille){
-		$query = $this->db->query("INSERT INTO `sizes` (`size_name`, `type_name`) VALUES ('".$nouv_taille."', ''); ");
+	public function ajout_taille($nouv_taille,$type){
+		$query = $this->db->query("INSERT INTO `sizes` (`size_name`, `type_name`) VALUES ('".$nouv_taille."', '".$type."'); ");
 			return ($query);
+	}
+
+	public function ajout_type($type){
+		$query = $this->db->query("INSERT INTO types_pdt VALUES ('".$type."');");
+		return ($query);
+	}
+	public function get_prix($pdt_id){
+		$query = $this->db->query("select price from product_variants where pdt_id = '".$pdt_id."' group by price"); 
+		return $query->row();
 	}
 }
 

@@ -8,11 +8,15 @@
     <img src="<?php echo base_url();?>style/img/<?php echo $produit->pdt_img?>" alt="" style="display:block; margin:auto;">
     <h3><?php echo $produit->pdt_nom ?>   </h3>
     <br>
+    <h5><?php echo $prix->price; ?> € <h5>
+        <br> 
     <?php echo $produit->pdt_description; 
         echo "<br>";
         echo ".<br>";
     ?>
         <?php if($produit->type_name != 'Nourriture') { // si le produit est un vetements on affiche le champs de choisi du sexe?>
+
+    <?php if($produit->type_name == 'Vetements') {?>
 
     <div class="form-group">
     <select class="form-control" name="choix">
@@ -27,9 +31,13 @@
     <select class="form-control" name="sexe">
       <option value="H">Homme</option>
       <option value="F">Femme</option>
+        <option value="HF">H/F</option>
+
+
     </select>
     </div>
-
+    
+<?php }?>
      <div class="form-group">
         <label for="exampleFormControlSelect1">Couleur:</label>
         <select class="form-control" id="exampleFormControlSelect1" name="color">

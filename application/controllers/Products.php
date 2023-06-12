@@ -18,6 +18,7 @@ class Products extends CI_Controller {
 		$data['produit'] = $this->db_model->pdt($id_pdt);
 		$data['color'] = $this->db_model->get_color($id_pdt);
 		$data['size'] = $this->db_model->get_size($id_pdt,$data['type']);
+		$data['prix'] =$this->db_model->get_prix($id_pdt);
 		//On determine si c'est un utilisateur connecte ou pas et en fonction de ca on afficher la bar de navigation
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'U'){//profil utilisateur 	
@@ -42,7 +43,21 @@ class Products extends CI_Controller {
 		$this->load->view('templates/bas');
 	}
 	
+	public function evenements(){
+		if($this->session->userdata('connecter')){
+			if($this->session->userdata('role') == 'U'){//profil utilisateur 	
+				$this->load->view('templates/menu_utilisateur');
+			}
+			else { //Si c'est un admin 
+				$this->load->view('templates/haut');
+			}
+		}
+		else { //Si l'le visiteur n'est pas connecte : 
+			$this->load->view('templates/haut');
+		}
+		$this->load->view('evenements');
 
+	}
 
 	//Choix de la taille, couleurs, qte
 	public function choix_variants($pdt_id){
@@ -64,20 +79,24 @@ class Products extends CI_Controller {
 		$data['produit'] = $this->db_model->pdt($pdt_id);
 		$data['color'] = $this->db_model->get_color($pdt_id);
 		$data['size'] = $this->db_model->get_size($pdt_id,$data['type']);
+				$data['prix'] =$this->db_model->get_prix($pdt_id);
 
 		if($this->session->userdata('connecter')){
 			if($this->session->userdata('role') == 'A' || $this->session->userdata('role') == 'U'){//profil admin 	
 				//verif si le variant choisi cexiste ou pas dans la base de donnnees et si le stock est suffisant 		 
-				if ($choix == 'adulte') {
+				if ($choix == 'adulte' && $data['produit']->type_name == 'Vetements') {
+					//echo "jeeeee";
 					$data['variant'] = $this->db_model->verif_variant($pdt_id,$color,$size, $qte,$sexe);
 				}
 				else{
-					$data['variant'] = $this->db_model->verif_variant($pdt_id,$color,$sizejr, $qte,$sexe);
+					//echo "je suis la";
+
+					$data['variant'] = $this->db_model->verif_variantjr($pdt_id,$color,$size, $qte,$sexe);
 				}
 
 				if($data['produit']->type_name != 'Nourriture'){
 					if ($data['variant'] !== false ) { //au cas ou le variant choisi existe, on l'ajoute au panier s
-						var_dump($data['variant']);
+						//var_dump($data['variant']);
 					    $cpt_id = $this->session->userdata('id');
 					    $this->db_model->insert_panier($cpt_id, $data['variant']->variant_id, $qte);
 					    echo "Votre commande a etait ajoute dans le panier";
@@ -85,7 +104,7 @@ class Products extends CI_Controller {
 					    $this->load->view('produit',$data);
 					    $this->load->view('templates/bas');
 					} else { // si non on affiche un message d'erreur et on reaffiche la fiche du produit
-					    echo "La taille ou la couleur du produit que vous avez choisi n'est pas disponible. Désolé !";
+					    echo "Le variant du produit que vous avez choisi n'est pas disponible. Désolé !";
 					    $this->load->view('templates/menu_utilisateur');
 						//Chargement de la view du milieu : page_accueil.php
 						$this->load->view('produit',$data);
@@ -140,17 +159,7 @@ class Products extends CI_Controller {
 		}
 	}
 
-	public function form_size(){
-		if($this->session->userdata('connecter') && $this->session->userdata('role') == 'A'){ 	
-			$this->load->view('templates/menu_administrateur');
-			$this->load->view('form_size');
-		}				 
-		else{			
-			$this->session->sess_destroy();
-			redirect('compte/connecter');
-			echo "Vous etiez deconnnecter";
-		}
-	}
+
 
 	//afficher panier
 	public function Panier(){
@@ -375,10 +384,35 @@ class Products extends CI_Controller {
 		}
 	}
 
+	public function form_size(){
+		if($this->session->userdata('connecter') && $this->session->userdata('role') == 'A'){ 
+			$data['types'] = $this->db_model->get_types_pdts();
+			$this->load->view('templates/menu_administrateur');
+			$this->load->view('form_size',$data);
+		}				 
+		else{			
+			$this->session->sess_destroy();
+			redirect('compte/connecter');
+			echo "Vous etiez deconnnecter";
+		}
+	}
+
+	public function form_type(){
+		if($this->session->userdata('connecter') && $this->session->userdata('role') == 'A'){ 
+			$this->load->view('templates/menu_administrateur');
+			$this->load->view('form_type');
+		}				 
+		else{			
+			$this->session->sess_destroy();
+			redirect('compte/connecter');
+			echo "Vous etiez deconnnecter";
+		}
+	}
 	public function ajout_taille(){
 		if($this->session->userdata('connecter') && $this->session->userdata('role') == 'A'){
 			$nouv_taille = $this->input->post('nouv_taille');
-			$this->db_model->ajout_taille($nouv_taille);
+			$type =$this->input->post('type');
+			$this->db_model->ajout_taille($nouv_taille,$type);
 			redirect('products/produits');
 
 		}
@@ -386,6 +420,18 @@ class Products extends CI_Controller {
 			redirect('compte/logout');
 		}
 	}
+		public function ajout_type(){
+		if($this->session->userdata('connecter') && $this->session->userdata('role') == 'A'){
+			$type =$this->input->post('type');
+			$this->db_model->ajout_type($type);
+			redirect('products/form_size');
+
+		}
+		else{
+			redirect('compte/logout');
+		}
+	}
+
 
 }
 ?>
