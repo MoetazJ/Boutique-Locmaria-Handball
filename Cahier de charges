@@ -7,7 +7,6 @@ Créer une boutique en ligne pour vendre une variété de produits, avec la poss
 Tous les consommateurs intéressés par l'achat de produits en ligne.
 
 3. Fonctionnalités du site :
-
 3.1 Gestion des utilisateurs :
 - Inscription et connexion des utilisateurs.
 - Profil utilisateur avec la possibilité de modifier les informations personnelles.
@@ -70,27 +69,5 @@ Tous les consommateurs intéressés par l'achat de produits en ligne.
 - Le site doit être responsive, adapté à tous les types d'écrans (ordinateur, tablette, mobile).
 - Le site doit être sécurisé, notamment en ce qui concerne les données des utilisateurs et les transactions.
 
-8. Délais et livrables :
-• Phase 1 : Conception et développement du site
-• Durée estimée : 4 semaines
-• Livrables :
-• Maquette du site web avec les pages principales (accueil, produits, panier, commande, compte utilisateur)
-• Backend fonctionnel avec les fonctionnalités de base (gestion des utilisateurs, des produits, du panier, des commandes)
-• Frontend responsive et attrayant avec un design adapté à l'identité visuelle de Locmaria Handball
-• Phase 2 : Personnalisation des produits
-• Durée estimée : 2 semaines
-• Livrables :
-• Ajout de fonctionnalités de personnalisation des produits (par exemple, choix de couleurs, ajout de texte)
-• Intégration de l'outil de personnalisation dans le processus d'achat
-• Phase 3 : Tests et optimisation
-• Durée estimée : 1 semaine
-• Livrables :
-• Tests complets du site pour vérifier la stabilité, la sécurité et le bon fonctionnement des fonctionnalités
-• Optimisation des performances du site pour garantir une expérience utilisateur fluide
-• Phase 4 : Déploiement et formation
-• Durée estimée : 1 semaine
-• Livrables :
-• Déploiement du site sur un serveur en production
-• Formation de l'équipe de Locmaria Handball pour gérer le site et effectuer les tâches administratives
 
 .
